@@ -88,7 +88,7 @@ const PieChartIcon = (props) => <Icon {...props}><path d="M21.21 15.89A10 10 0 1
 // ==========================================
 
 const Card = ({ children, className = "", theme }) => (
-    <div className={`${theme?.card || 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl'} rounded-3xl p-6 transition-all duration-300 ${className}`}>{children}</div>
+    <div className={`${theme?.card || 'bg-cyan dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl'} rounded-3xl p-6 transition-all duration-300 ${className}`}>{children}</div>
 );
 
 const Button = ({ children, variant = "primary", onClick, className = "", theme, disabled, isLoading, ...props }) => (
@@ -114,7 +114,7 @@ const Button = ({ children, variant = "primary", onClick, className = "", theme,
 
 const Input = ({ className = "", theme, ...props }) => (
     <input {...props} className={`w-full px-4 py-3 rounded-xl transition-all outline-none border 
-        ${theme?.input || 'bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white'}
+        ${theme?.input || 'bg-cyan dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white'}
         placeholder-slate-400 dark:placeholder-slate-500
         focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/20 ${className}`} 
     />
@@ -187,7 +187,7 @@ export default function App() {
         appBg: darkMode ? 'bg-slate-950' : 'bg-gray-50', 
         navBg: darkMode 
             ? (isUserAdmin ? 'bg-slate-900 border-b border-cyan-900/50' : 'bg-slate-900 border-b border-slate-800')
-            : 'bg-white border-b border-slate-200 shadow-sm',
+            : 'bg-cyan border-b border-slate-200 shadow-sm',
         
         // Text - Increased contrast for readability
         textPrimary: darkMode ? 'text-gray-100' : 'text-slate-900',
@@ -198,7 +198,7 @@ export default function App() {
         // Cards - Better separation from background
         card: darkMode 
             ? 'bg-slate-900 border border-slate-800 shadow-xl shadow-black/20' 
-            : 'bg-white border border-slate-200 shadow-lg shadow-slate-200/60',
+            : 'bg-cyan border border-slate-200 shadow-lg shadow-slate-200/60',
         
         // Inputs - Distinct from cards
         input: darkMode 
@@ -212,7 +212,7 @@ export default function App() {
         
         accentSecondary: darkMode 
             ? 'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700' 
-            : 'bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 shadow-sm',
+            : 'bg-cyan hover:bg-slate-50 text-slate-700 border border-slate-200 shadow-sm',
         
         navActive: isUserAdmin 
             ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20' 
@@ -481,7 +481,7 @@ export default function App() {
                     onChange={toggleTheme}
                 />
                 <div className={`block w-14 h-8 rounded-full ${darkMode ? 'bg-slate-800' : 'bg-slate-200'} shadow-inner`}></div>
-                <div className={`absolute left-1 top-1 w-6 h-6 rounded-full transition-all duration-300 flex items-center justify-center transform ${!darkMode ? 'translate-x-full bg-white shadow-md' : 'translate-x-0 bg-slate-600 shadow-md'}`}>
+                <div className={`absolute left-1 top-1 w-6 h-6 rounded-full transition-all duration-300 flex items-center justify-center transform ${!darkMode ? 'translate-x-full bg-cyan shadow-md' : 'translate-x-0 bg-slate-600 shadow-md'}`}>
                     {darkMode ? <MoonIcon className="w-4 h-4 text-slate-200" /> : <SunIcon className="w-4 h-4 text-yellow-500" />}
                 </div>
             </div>
@@ -636,7 +636,7 @@ export default function App() {
             <div className={`min-h-screen flex items-center justify-center p-4 ${theme.appBg} transition-colors duration-500`}>
                 <div className="w-full max-w-md">
                     <div className="text-center mb-8">
-                        <div className="w-20 h-20 mx-auto flex items-center justify-center mb-4 bg-white rounded-2xl shadow-lg">
+                        <div className="w-20 h-20 mx-auto flex items-center justify-center mb-4 bg-cyan rounded-2xl shadow-lg">
                             <img src="/logo.png" alt="Acadex" className="h-12 w-auto object-contain" />
                         </div>
                         <h1 className={`text-3xl font-extrabold ${theme.heading}`}>Acadex</h1>
@@ -656,13 +656,13 @@ export default function App() {
                                 
                                 <div className="relative py-4">
                                     <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-slate-300 dark:border-slate-700"></span></div>
-                                    <div className="relative flex justify-center text-xs uppercase"><span className={`bg-white dark:bg-slate-900 px-2 ${theme.textSecondary}`}>Or continue with</span></div>
+                                    <div className="relative flex justify-center text-xs uppercase"><span className={`bg-cyan dark:bg-slate-900 px-2 ${theme.textSecondary}`}>Or continue with</span></div>
                                 </div>
 
                                 <button 
                                     onClick={() => handleAction('google')} 
                                     disabled={authLoading}
-                                    className="w-full h-12 flex items-center justify-center bg-white text-gray-700 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors font-medium shadow-sm"
+                                    className="w-full h-12 flex items-center justify-center bg-cyan text-gray-700 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors font-medium shadow-sm"
                                 >
                                     <GoogleIcon className="w-5 h-5 mr-3" />
                                     {authLoading ? 'Connecting...' : 'Continue with Google'}
@@ -848,7 +848,7 @@ export default function App() {
                     <h1 className={`text-4xl font-extrabold ${theme.heading}`}>Project Tasks</h1>
                     <div className="flex bg-slate-100 dark:bg-slate-800 rounded-lg p-1">
                         {['list', 'board', 'calendar'].map(m => (
-                            <button key={m} onClick={() => setViewMode(m)} className={`px-4 py-2 rounded-md text-sm capitalize font-medium transition-all ${viewMode === m ? `bg-white dark:bg-slate-700 shadow ${isUserAdmin ? 'text-cyan-500' : 'text-fuchsia-500'}` : theme.textSecondary}`}>
+                            <button key={m} onClick={() => setViewMode(m)} className={`px-4 py-2 rounded-md text-sm capitalize font-medium transition-all ${viewMode === m ? `bg-cyan dark:bg-slate-700 shadow ${isUserAdmin ? 'text-cyan-500' : 'text-fuchsia-500'}` : theme.textSecondary}`}>
                                 {m === 'board' ? <LayoutIcon className="w-4 h-4 inline mr-1"/> : m === 'calendar' ? <CalendarIcon className="w-4 h-4 inline mr-1"/> : <ProgressIcon className="w-4 h-4 inline mr-1"/>} {m}
                             </button>
                         ))}
@@ -861,7 +861,7 @@ export default function App() {
                         <div className="flex flex-col md:flex-row gap-4">
                             <Input theme={theme} placeholder="New Task Title" value={newTask.title} onChange={e => setNewTask({...newTask, title: e.target.value})} />
                             <select className={`px-4 py-3 rounded-xl outline-none border ${theme.input}`} value={newTask.assigneeId} onChange={e => setNewTask({...newTask, assigneeId: e.target.value})}>
-                                {userTeam.members.map(m => <option key={m.id} value={m.id} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">{m.name}</option>)}
+                                {userTeam.members.map(m => <option key={m.id} value={m.id} className="bg-cyan dark:bg-slate-800 text-slate-900 dark:text-white">{m.name}</option>)}
                             </select>
                             <div className="w-full" style={{ colorScheme: darkMode ? 'dark' : 'light' }}>
                                 <Input theme={theme} type="date" value={newTask.date} onChange={e => setNewTask({...newTask, date: e.target.value})} />
@@ -876,7 +876,7 @@ export default function App() {
                     <div className="space-y-3">
                         {userTeam.tasks?.length === 0 && <div className="text-center py-10 opacity-50">No tasks yet. Add one above!</div>}
                         {userTeam.tasks?.map(t => (
-                            <div key={t.id} className={`flex items-center justify-between p-4 rounded-xl border ${darkMode ? 'bg-slate-900/50 border-slate-800' : 'bg-white border-slate-100 shadow-sm'}`}>
+                            <div key={t.id} className={`flex items-center justify-between p-4 rounded-xl border ${darkMode ? 'bg-slate-900/50 border-slate-800' : 'bg-cyan border-slate-100 shadow-sm'}`}>
                                 <div className="flex items-center gap-4">
                                     <button onClick={() => moveTask(t, 1)} className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${t.completed ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-slate-400'}`}>
                                         {t.completed && <CheckCircleIcon className="w-4 h-4" />}
@@ -907,7 +907,7 @@ export default function App() {
                                 </h3>
                                 <div className="space-y-3">
                                     {userTeam.tasks?.filter(t => (t.status || (t.completed ? 'Done' : 'To Do')) === status).map(t => (
-                                        <div key={t.id} className={`p-3 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200 shadow-sm'}`}>
+                                        <div key={t.id} className={`p-3 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-cyan border-slate-200 shadow-sm'}`}>
                                             <p className={`text-sm font-medium mb-2 ${theme.textPrimary}`}>{t.title}</p>
                                             <div className="flex justify-between items-center">
                                                 <span className="text-[10px] uppercase tracking-wider text-slate-500">{t.assigneeName}</span>
@@ -958,7 +958,7 @@ export default function App() {
                             <div className="h-48 overflow-y-auto space-y-3 mb-4 p-2 bg-slate-50 dark:bg-slate-900/50 rounded-xl">
                                 {commentTask.comments?.length === 0 && <p className="text-center text-slate-400 text-sm mt-10">No comments yet.</p>}
                                 {commentTask.comments?.map(c => (
-                                    <div key={c.id} className="bg-white dark:bg-slate-800 p-2 rounded-lg shadow-sm text-sm">
+                                    <div key={c.id} className="bg-cyan dark:bg-slate-800 p-2 rounded-lg shadow-sm text-sm">
                                         <p className="font-bold text-xs text-fuchsia-500">{c.author}</p>
                                         <p className={theme.textPrimary}>{c.text}</p>
                                     </div>
@@ -1272,7 +1272,7 @@ export default function App() {
                             </button>
                             <div className="flex bg-slate-100 dark:bg-slate-800 rounded-lg p-1">
                                 {['analytics', 'projects', 'users'].map(t => (
-                                    <button key={t} onClick={() => setTab(t)} className={`px-4 py-2 rounded-md text-sm capitalize font-medium transition-all ${tab === t ? 'bg-white dark:bg-slate-700 shadow text-cyan-600' : theme.textSecondary}`}>{t}</button>
+                                    <button key={t} onClick={() => setTab(t)} className={`px-4 py-2 rounded-md text-sm capitalize font-medium transition-all ${tab === t ? 'bg-cyan dark:bg-slate-700 shadow text-cyan-600' : theme.textSecondary}`}>{t}</button>
                                 ))}
                             </div>
                         </div>
@@ -1453,7 +1453,7 @@ export default function App() {
                     <Card theme={theme} className={`flex flex-col md:flex-row gap-8 p-10 ${isUserAdmin ? 'bg-gradient-to-br from-cyan-800 to-slate-900' : 'bg-gradient-to-br from-indigo-800 to-slate-900'} !border-none text-white relative overflow-hidden min-h-[300px] items-center`}>
                         <div className="absolute right-0 bottom-0 opacity-10 transform translate-y-1/4 translate-x-1/4"><DatabaseIcon width="400" height="400" /></div>
                         <div className="relative z-10 flex-1 space-y-4">
-                            <div className="inline-block px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-bold tracking-wide uppercase">
+                            <div className="inline-block px-3 py-1 rounded-full bg-cyan/10 backdrop-blur-md border border-white/20 text-xs font-bold tracking-wide uppercase">
                                 {isUserAdmin ? 'Admin Console' : 'Student Portal'}
                             </div>
                             <h2 className="text-5xl font-extrabold tracking-tight">Welcome, {userName.split(' ')[0]}!</h2>
@@ -1463,8 +1463,8 @@ export default function App() {
                                     : 'You are not currently assigned to a project. Register a new team or wait for an invitation to begin.'}
                             </p>
                             <div className="pt-4">
-                                {!isUserAdmin && <Button theme={theme} onClick={() => setCurrentView(VIEWS.REGISTRATION)} className="bg-white text-indigo-900 hover:bg-indigo-50 border-none shadow-xl">Start New Project <PlusIcon className="w-5 h-5"/></Button>}
-                                {isUserAdmin && <Button theme={theme} onClick={() => setCurrentView(VIEWS.ADMIN)} className="bg-white text-cyan-900 hover:bg-cyan-50 border-none shadow-xl">Go to Analytics <ShieldIcon className="w-5 h-5"/></Button>}
+                                {!isUserAdmin && <Button theme={theme} onClick={() => setCurrentView(VIEWS.REGISTRATION)} className="bg-cyan text-indigo-900 hover:bg-indigo-50 border-none shadow-xl">Start New Project <PlusIcon className="w-5 h-5"/></Button>}
+                                {isUserAdmin && <Button theme={theme} onClick={() => setCurrentView(VIEWS.ADMIN)} className="bg-cyan text-cyan-900 hover:bg-cyan-50 border-none shadow-xl">Go to Analytics <ShieldIcon className="w-5 h-5"/></Button>}
                             </div>
                         </div>
                     </Card>
@@ -1503,7 +1503,7 @@ export default function App() {
                         <div className="absolute top-0 right-0 p-4 opacity-10"><LayoutIcon width="250" height="250" className="text-white"/></div>
                         <div className="relative z-10">
                             <div className="flex items-center gap-2 mb-2 text-indigo-100">
-                                <span className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold">{userTeam.teamName}</span>
+                                <span className="bg-cyan/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold">{userTeam.teamName}</span>
                                 <span className="text-xs">•</span>
                                 <span className="text-xs font-medium">{isTeamActive ? 'Active' : 'Forming'}</span>
                             </div>
@@ -1516,7 +1516,7 @@ export default function App() {
                                 <span>{progress}%</span>
                             </div>
                             <div className="w-full h-3 bg-black/20 rounded-full overflow-hidden">
-                                <div className="h-full bg-white shadow-lg transition-all duration-1000 ease-out" style={{ width: `${progress}%` }}></div>
+                                <div className="h-full bg-cyan shadow-lg transition-all duration-1000 ease-out" style={{ width: `${progress}%` }}></div>
                             </div>
                         </div>
                     </Card>
@@ -1703,7 +1703,7 @@ export default function App() {
                         </button>
                         
                         {showNotifications && (
-                            <div className="absolute right-0 top-12 w-64 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-100 dark:border-slate-700 p-4 z-50">
+                            <div className="absolute right-0 top-12 w-64 bg-cyan dark:bg-slate-800 rounded-xl shadow-xl border border-slate-100 dark:border-slate-700 p-4 z-50">
                                 <h4 className="text-sm font-bold mb-2">Notifications</h4>
                                 {notifications.length === 0 ? (
                                     <p className="text-xs text-slate-500">No new alerts.</p>
@@ -1817,22 +1817,22 @@ export default function App() {
 
                                     {userTeam.evaluation.breakdown && (
                                         <div className="grid grid-cols-3 gap-4 mb-8 max-w-md mx-auto">
-                                            <div className={`p-3 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200 shadow-sm'}`}>
+                                            <div className={`p-3 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-cyan border-slate-200 shadow-sm'}`}>
                                                 <div className={`text-[10px] font-bold uppercase tracking-wider ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Innovation</div>
                                                 <div className={`text-2xl font-black ${darkMode ? 'text-white' : 'text-slate-800'}`}>{userTeam.evaluation.breakdown.innovation || 0}</div>
                                             </div>
-                                            <div className={`p-3 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200 shadow-sm'}`}>
+                                            <div className={`p-3 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-cyan border-slate-200 shadow-sm'}`}>
                                                 <div className={`text-[10px] font-bold uppercase tracking-wider ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Execution</div>
                                                 <div className={`text-2xl font-black ${darkMode ? 'text-white' : 'text-slate-800'}`}>{userTeam.evaluation.breakdown.execution || 0}</div>
                                             </div>
-                                            <div className={`p-3 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200 shadow-sm'}`}>
+                                            <div className={`p-3 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-cyan border-slate-200 shadow-sm'}`}>
                                                 <div className={`text-[10px] font-bold uppercase tracking-wider ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Docs</div>
                                                 <div className={`text-2xl font-black ${darkMode ? 'text-white' : 'text-slate-800'}`}>{userTeam.evaluation.breakdown.documentation || 0}</div>
                                             </div>
                                         </div>
                                     )}
                                     
-                                    <div className={`text-left p-6 rounded-xl ${darkMode ? 'bg-slate-800 border border-slate-700' : 'bg-white border border-slate-200'}`}>
+                                    <div className={`text-left p-6 rounded-xl ${darkMode ? 'bg-slate-800 border border-slate-700' : 'bg-cyan border border-slate-200'}`}>
                                         <p className={`text-sm font-bold ${theme.textSecondary} uppercase mb-3 border-b pb-2 ${darkMode ? 'border-slate-700' : 'border-slate-200'}`}>Instructor Feedback</p>
                                         <p className={theme.textPrimary}>{userTeam.evaluation.feedback}</p>
                                     </div>
