@@ -88,7 +88,7 @@ const PieChartIcon = (props) => <Icon {...props}><path d="M21.21 15.89A10 10 0 1
 // ==========================================
 
 const Card = ({ children, className = "", theme }) => (
-    <div className={`${theme?.card || 'bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 shadow-xl'} rounded-3xl p-6 transition-all duration-300 ${className}`}>{children}</div>
+    <div className={`${theme?.card || 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl'} rounded-3xl p-6 transition-all duration-300 ${className}`}>{children}</div>
 );
 
 const Button = ({ children, variant = "primary", onClick, className = "", theme, disabled, isLoading, ...props }) => (
@@ -112,11 +112,11 @@ const Button = ({ children, variant = "primary", onClick, className = "", theme,
     </button>
 );
 
-const Input = ({ className = "", ...props }) => (
-    <input {...props} className={`w-full px-4 py-3 rounded-xl transition-all outline-none border bg-transparent 
-        border-slate-300 dark:border-slate-700 
-        text-slate-900 dark:text-white 
-        placeholder-slate-400 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/20 ${className}`} 
+const Input = ({ className = "", theme, ...props }) => (
+    <input {...props} className={`w-full px-4 py-3 rounded-xl transition-all outline-none border 
+        ${theme?.input || 'bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white'}
+        placeholder-slate-400 dark:placeholder-slate-500
+        focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/20 ${className}`} 
     />
 );
 
@@ -181,37 +181,46 @@ export default function App() {
 
     const toggleTheme = () => setDarkMode(!darkMode);
     
-    // -- Theme Config --
+    // -- Theme Config (Refined for better contrast) --
+    // -- Theme Config (Refined for High Contrast & Readability) --
     const theme = {
-        appBg: darkMode ? 'bg-gray-950' : 'bg-slate-50',
+        appBg: darkMode ? 'bg-slate-950' : 'bg-gray-50', 
         navBg: darkMode 
-            ? (isUserAdmin ? 'bg-slate-900/95 backdrop-blur-xl border-b border-cyan-900' : 'bg-gray-900/95 backdrop-blur-xl border-b border-slate-800')
-            : 'bg-white/95 backdrop-blur-xl border-b border-slate-200',
-        textPrimary: darkMode ? 'text-gray-50' : 'text-slate-900',
-        textSecondary: darkMode ? 'text-gray-400' : 'text-slate-500',
-        heading: darkMode ? 'text-white' : 'text-slate-900',
+            ? (isUserAdmin ? 'bg-slate-900 border-b border-cyan-900/50' : 'bg-slate-900 border-b border-slate-800')
+            : 'bg-white border-b border-slate-200 shadow-sm',
         
+        // Text - Increased contrast for readability
+        textPrimary: darkMode ? 'text-gray-100' : 'text-slate-900',
+        textSecondary: darkMode ? 'text-slate-400' : 'text-slate-600',
+        textHighlight: darkMode ? 'text-white' : 'text-indigo-900',
+        heading: darkMode ? 'text-white tracking-tight' : 'text-slate-900 tracking-tight',
+        
+        // Cards - Better separation from background
         card: darkMode 
-            ? 'bg-gray-900/50 border border-slate-800 shadow-2xl shadow-black/30' 
-            : 'bg-white border border-slate-200 shadow-xl shadow-slate-200/50',
+            ? 'bg-slate-900 border border-slate-800 shadow-xl shadow-black/20' 
+            : 'bg-white border border-slate-200 shadow-lg shadow-slate-200/60',
         
-        input: darkMode ? 'bg-gray-800 text-white border-slate-700' : 'bg-white text-slate-900 border-slate-300',
+        // Inputs - Distinct from cards
+        input: darkMode 
+            ? 'bg-slate-950 text-white border-slate-700 focus:border-indigo-500 placeholder-slate-600' 
+            : 'bg-slate-50 text-slate-900 border-slate-300 focus:border-indigo-600 placeholder-slate-400',
         
+        // Buttons & Accents
         accentPrimary: isUserAdmin 
-            ? 'bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 text-white shadow-xl shadow-cyan-500/40' 
-            : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-700 hover:to-fuchsia-700 text-white shadow-xl shadow-fuchsia-500/40',
+            ? 'bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-900/20 border border-transparent' 
+            : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-900/20 border border-transparent',
         
         accentSecondary: darkMode 
-            ? 'bg-slate-800 hover:bg-slate-700 text-gray-200 border border-slate-700' 
-            : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200',
+            ? 'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700' 
+            : 'bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 shadow-sm',
         
         navActive: isUserAdmin 
-            ? 'bg-cyan-600 text-white shadow-md shadow-cyan-500/30' 
-            : 'bg-fuchsia-600 text-white shadow-md shadow-fuchsia-500/30',
+            ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20' 
+            : 'bg-indigo-500/10 text-indigo-600 border border-indigo-500/20',
         
         navItem: darkMode 
-            ? 'text-gray-300 hover:bg-slate-800/50 hover:text-white' 
-            : 'text-slate-600 hover:bg-fuchsia-50 hover:text-fuchsia-700',
+            ? 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/50' 
+            : 'text-slate-500 hover:text-indigo-700 hover:bg-slate-100',
     };
 
     const navItems = useMemo(() => {
@@ -248,7 +257,7 @@ export default function App() {
         } catch (e) { setError(`Init Failed: ${e.message}`); }
     }, []);
 
-    // -- Auth State Listener & DB Sync (BUG FIX) --
+    // -- Auth State Listener & DB Sync --
     useEffect(() => {
         if (!auth || !db) return;
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -260,7 +269,6 @@ export default function App() {
                 setUserName(name);
                 setIsUserAdmin(ADMIN_EMAILS.includes(email.toLowerCase()));
 
-                // FIX: Check if user doc exists, if not create it (handles Google Sign-In)
                 const userDocRef = doc(db, 'artifacts', appId, 'users', user.uid);
                 try {
                     const docSnap = await getDoc(userDocRef);
@@ -481,7 +489,7 @@ export default function App() {
     );
 
     const Footer = () => (
-        <footer className={`w-full py-8 mt-auto ${darkMode ? 'bg-slate-900 border-t border-slate-800 text-slate-400' : 'bg-slate-50 border-t border-slate-200 text-slate-500'}`}>
+        <footer className={`w-full py-8 mt-auto ${darkMode ? 'bg-slate-950 border-t border-slate-800 text-slate-400' : 'bg-slate-50 border-t border-slate-200 text-slate-500'}`}>
             <div className="max-w-7xl mx-auto px-4 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
                 <div className="flex items-center gap-2">
                     <img src="/logo.png" alt="Acadex" className="h-6 w-auto opacity-50 grayscale" />
@@ -563,7 +571,7 @@ export default function App() {
                     <div className={`relative h-40 rounded-t-3xl mb-16 shadow-inner ${isUserAdmin ? 'bg-gradient-to-tr from-cyan-700 to-teal-800' : 'bg-gradient-to-tr from-violet-700 to-fuchsia-800'}`}>
                         <div className="absolute -bottom-12 left-8">
                             <div className="relative group">
-                                <div className={`w-28 h-28 rounded-full border-4 ${darkMode ? 'border-gray-950' : 'border-white'} overflow-hidden bg-gray-200 flex items-center justify-center shadow-xl`}>
+                                <div className={`w-28 h-28 rounded-full border-4 ${darkMode ? 'border-slate-950' : 'border-white'} overflow-hidden bg-gray-200 dark:bg-slate-700 flex items-center justify-center shadow-xl`}>
                                     {formData.photoURL ? (
                                         <img key={userId} src={formData.photoURL} alt="Profile" className="w-full h-full object-cover" />
                                     ) : (
@@ -587,11 +595,11 @@ export default function App() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
                                 <label className={`text-sm font-medium ${theme.textSecondary}`}>Full Name</label>
-                                <Input value={formData.displayName} onChange={e => setFormData({...formData, displayName: e.target.value})} />
+                                <Input theme={theme} value={formData.displayName} onChange={e => setFormData({...formData, displayName: e.target.value})} />
                             </div>
                              <div className="space-y-2">
                                 <label className={`text-sm font-medium ${theme.textSecondary}`}>Role / Title</label>
-                                <Input value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} placeholder="e.g. Senior Student" />
+                                <Input theme={theme} value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} placeholder="e.g. Senior Student" />
                             </div>
                             <div className="md:col-span-2 space-y-2">
                                 <label className={`text-sm font-medium ${theme.textSecondary}`}>Bio</label>
@@ -599,13 +607,13 @@ export default function App() {
                                     value={formData.bio} 
                                     onChange={e => setFormData({...formData, bio: e.target.value})} 
                                     rows="4" 
-                                    className={`w-full p-4 rounded-xl outline-none border ${darkMode ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white border-slate-300 text-slate-900'}`}
+                                    className={`w-full p-4 rounded-xl outline-none border ${theme.input}`}
                                     placeholder="Tell us about yourself..."
                                 />
                             </div>
                             <div className="md:col-span-2 space-y-2">
                                 <label className={`text-sm font-medium ${theme.textSecondary}`}>Email (Read-Only)</label>
-                                <Input value={userEmail || 'N/A (Guest User)'} readOnly disabled />
+                                <Input theme={theme} value={userEmail || 'N/A (Guest User)'} readOnly disabled />
                             </div>
                         </div>
                         <div className="flex justify-end">
@@ -648,7 +656,7 @@ export default function App() {
                                 
                                 <div className="relative py-4">
                                     <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-slate-300 dark:border-slate-700"></span></div>
-                                    <div className="relative flex justify-center text-xs uppercase"><span className={`bg-white dark:bg-gray-900 px-2 ${theme.textSecondary}`}>Or continue with</span></div>
+                                    <div className="relative flex justify-center text-xs uppercase"><span className={`bg-white dark:bg-slate-900 px-2 ${theme.textSecondary}`}>Or continue with</span></div>
                                 </div>
 
                                 <button 
@@ -672,12 +680,12 @@ export default function App() {
                                 <div className="space-y-4">
                                     <div>
                                         <label className={`block text-xs font-medium mb-1 ${theme.textSecondary}`}>Email Address</label>
-                                        <Input type="email" placeholder="name@university.edu" value={creds.email} onChange={e => setCreds({...creds, email: e.target.value})} required />
+                                        <Input theme={theme} type="email" placeholder="name@university.edu" value={creds.email} onChange={e => setCreds({...creds, email: e.target.value})} required />
                                     </div>
                                     <div>
                                         <label className={`block text-xs font-medium mb-1 ${theme.textSecondary}`}>Password</label>
                                         <div className="relative">
-                                            <Input type={showPass ? "text" : "password"} placeholder="••••••••" value={creds.pass} onChange={e => setCreds({...creds, pass: e.target.value})} required />
+                                            <Input theme={theme} type={showPass ? "text" : "password"} placeholder="••••••••" value={creds.pass} onChange={e => setCreds({...creds, pass: e.target.value})} required />
                                             <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-3.5 text-gray-400 hover:text-gray-600">
                                                 {showPass ? <EyeOffIcon className="w-5 h-5"/> : <EyeIcon className="w-5 h-5"/>}
                                             </button>
@@ -729,11 +737,11 @@ export default function App() {
                     <div className="space-y-6">
                         <div>
                             <label className={`block text-sm font-medium mb-2 ${theme.textSecondary}`}>Team Name</label>
-                            <Input value={form.team} onChange={e => setForm({...form, team: e.target.value})} placeholder="e.g. Alpha Squad" />
+                            <Input theme={theme} value={form.team} onChange={e => setForm({...form, team: e.target.value})} placeholder="e.g. Alpha Squad" />
                         </div>
                         <div>
                             <label className={`block text-sm font-medium mb-2 ${theme.textSecondary}`}>Project Title</label>
-                            <Input value={form.project} onChange={e => setForm({...form, project: e.target.value})} placeholder="e.g. AI Traffic Control Simulation" />
+                            <Input theme={theme} value={form.project} onChange={e => setForm({...form, project: e.target.value})} placeholder="e.g. AI Traffic Control Simulation" />
                         </div>
                         
                         <div>
@@ -741,7 +749,7 @@ export default function App() {
                             <div className="space-y-3">
                                 {memberEmails.map((email, index) => (
                                     <div key={index} className="flex gap-2 items-center">
-                                        <Input 
+                                        <Input theme={theme}
                                             type="email"
                                             value={email} 
                                             onChange={e => updateEmail(index, e.target.value)} 
@@ -838,9 +846,9 @@ export default function App() {
             <div className="max-w-6xl mx-auto space-y-6">
                 <div className="flex justify-between items-center">
                     <h1 className={`text-4xl font-extrabold ${theme.heading}`}>Project Tasks</h1>
-                    <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+                    <div className="flex bg-slate-100 dark:bg-slate-800 rounded-lg p-1">
                         {['list', 'board', 'calendar'].map(m => (
-                            <button key={m} onClick={() => setViewMode(m)} className={`px-4 py-2 rounded-md text-sm capitalize font-medium transition-all ${viewMode === m ? `bg-white dark:bg-gray-700 shadow ${isUserAdmin ? 'text-cyan-500' : 'text-fuchsia-500'}` : theme.textSecondary}`}>
+                            <button key={m} onClick={() => setViewMode(m)} className={`px-4 py-2 rounded-md text-sm capitalize font-medium transition-all ${viewMode === m ? `bg-white dark:bg-slate-700 shadow ${isUserAdmin ? 'text-cyan-500' : 'text-fuchsia-500'}` : theme.textSecondary}`}>
                                 {m === 'board' ? <LayoutIcon className="w-4 h-4 inline mr-1"/> : m === 'calendar' ? <CalendarIcon className="w-4 h-4 inline mr-1"/> : <ProgressIcon className="w-4 h-4 inline mr-1"/>} {m}
                             </button>
                         ))}
@@ -851,11 +859,13 @@ export default function App() {
                 {isLead && (
                     <Card theme={theme} className="mb-6">
                         <div className="flex flex-col md:flex-row gap-4">
-                            <Input placeholder="New Task Title" value={newTask.title} onChange={e => setNewTask({...newTask, title: e.target.value})} />
+                            <Input theme={theme} placeholder="New Task Title" value={newTask.title} onChange={e => setNewTask({...newTask, title: e.target.value})} />
                             <select className={`px-4 py-3 rounded-xl outline-none border ${theme.input}`} value={newTask.assigneeId} onChange={e => setNewTask({...newTask, assigneeId: e.target.value})}>
-                                {userTeam.members.map(m => <option key={m.id} value={m.id}>{m.name}</option>)}
+                                {userTeam.members.map(m => <option key={m.id} value={m.id} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">{m.name}</option>)}
                             </select>
-                            <Input type="date" value={newTask.date} onChange={e => setNewTask({...newTask, date: e.target.value})} />
+                            <div className="w-full" style={{ colorScheme: darkMode ? 'dark' : 'light' }}>
+                                <Input theme={theme} type="date" value={newTask.date} onChange={e => setNewTask({...newTask, date: e.target.value})} />
+                            </div>
                             <Button theme={theme} onClick={addTask}>Add</Button>
                         </div>
                     </Card>
@@ -866,18 +876,18 @@ export default function App() {
                     <div className="space-y-3">
                         {userTeam.tasks?.length === 0 && <div className="text-center py-10 opacity-50">No tasks yet. Add one above!</div>}
                         {userTeam.tasks?.map(t => (
-                            <div key={t.id} className={`flex items-center justify-between p-4 rounded-xl border ${darkMode ? 'bg-gray-900/50 border-gray-800' : 'bg-white border-gray-100 shadow-sm'}`}>
+                            <div key={t.id} className={`flex items-center justify-between p-4 rounded-xl border ${darkMode ? 'bg-slate-900/50 border-slate-800' : 'bg-white border-slate-100 shadow-sm'}`}>
                                 <div className="flex items-center gap-4">
-                                    <button onClick={() => moveTask(t, 1)} className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${t.completed ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-gray-400'}`}>
+                                    <button onClick={() => moveTask(t, 1)} className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${t.completed ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-slate-400'}`}>
                                         {t.completed && <CheckCircleIcon className="w-4 h-4" />}
                                     </button>
                                     <div>
                                         <p className={`font-medium ${t.completed ? 'line-through opacity-50' : ''} ${theme.textPrimary}`}>{t.title}</p>
-                                        <p className="text-xs text-gray-500">{t.assigneeName} • {t.status || 'To Do'}</p>
+                                        <p className="text-xs text-slate-500">{t.assigneeName} • {t.status || 'To Do'}</p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <button onClick={() => setCommentTask(t)} className="p-2 text-gray-400 hover:text-fuchsia-500 relative">
+                                    <button onClick={() => setCommentTask(t)} className="p-2 text-slate-400 hover:text-fuchsia-500 relative">
                                         <MessageSquareIcon className="w-5 h-5"/>
                                         {t.comments?.length > 0 && <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>}
                                     </button>
@@ -891,18 +901,18 @@ export default function App() {
                 {viewMode === 'board' && (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {['To Do', 'In Progress', 'Done'].map(status => (
-                            <div key={status} className={`p-4 rounded-2xl ${darkMode ? 'bg-gray-900/50' : 'bg-gray-50'}`}>
+                            <div key={status} className={`p-4 rounded-2xl ${darkMode ? 'bg-slate-900/50' : 'bg-slate-50'}`}>
                                 <h3 className={`font-bold mb-4 ${theme.heading} flex justify-between`}>
-                                    {status} <span className="bg-gray-200 dark:bg-gray-700 px-2 rounded text-xs py-1">{userTeam.tasks?.filter(t => (t.status || (t.completed ? 'Done' : 'To Do')) === status).length}</span>
+                                    {status} <span className="bg-slate-200 dark:bg-slate-700 px-2 rounded text-xs py-1">{userTeam.tasks?.filter(t => (t.status || (t.completed ? 'Done' : 'To Do')) === status).length}</span>
                                 </h3>
                                 <div className="space-y-3">
                                     {userTeam.tasks?.filter(t => (t.status || (t.completed ? 'Done' : 'To Do')) === status).map(t => (
-                                        <div key={t.id} className={`p-3 rounded-xl border ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200 shadow-sm'}`}>
+                                        <div key={t.id} className={`p-3 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200 shadow-sm'}`}>
                                             <p className={`text-sm font-medium mb-2 ${theme.textPrimary}`}>{t.title}</p>
                                             <div className="flex justify-between items-center">
-                                                <span className="text-[10px] uppercase tracking-wider text-gray-500">{t.assigneeName}</span>
+                                                <span className="text-[10px] uppercase tracking-wider text-slate-500">{t.assigneeName}</span>
                                                 <div className="flex gap-1">
-                                                    {status !== 'To Do' && <button onClick={() => moveTask(t, -1)} className="text-xs px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded hover:opacity-80">←</button>}
+                                                    {status !== 'To Do' && <button onClick={() => moveTask(t, -1)} className="text-xs px-2 py-1 bg-slate-200 dark:bg-slate-700 rounded hover:opacity-80">←</button>}
                                                     {status !== 'Done' && <button onClick={() => moveTask(t, 1)} className="text-xs px-2 py-1 bg-fuchsia-100 text-fuchsia-600 dark:bg-fuchsia-900/30 rounded hover:opacity-80">→</button>}
                                                 </div>
                                             </div>
@@ -945,20 +955,20 @@ export default function App() {
                     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
                         <Card theme={theme} className="w-full max-w-md">
                             <h3 className={`font-bold mb-4 ${theme.heading}`}>Comments: {commentTask.title}</h3>
-                            <div className="h-48 overflow-y-auto space-y-3 mb-4 p-2 bg-gray-50 dark:bg-gray-900/50 rounded-xl">
-                                {commentTask.comments?.length === 0 && <p className="text-center text-gray-400 text-sm mt-10">No comments yet.</p>}
+                            <div className="h-48 overflow-y-auto space-y-3 mb-4 p-2 bg-slate-50 dark:bg-slate-900/50 rounded-xl">
+                                {commentTask.comments?.length === 0 && <p className="text-center text-slate-400 text-sm mt-10">No comments yet.</p>}
                                 {commentTask.comments?.map(c => (
-                                    <div key={c.id} className="bg-white dark:bg-gray-800 p-2 rounded-lg shadow-sm text-sm">
+                                    <div key={c.id} className="bg-white dark:bg-slate-800 p-2 rounded-lg shadow-sm text-sm">
                                         <p className="font-bold text-xs text-fuchsia-500">{c.author}</p>
                                         <p className={theme.textPrimary}>{c.text}</p>
                                     </div>
                                 ))}
                             </div>
                             <div className="flex gap-2">
-                                <Input value={newComment} onChange={e => setNewComment(e.target.value)} placeholder="Type a comment..." />
+                                <Input theme={theme} value={newComment} onChange={e => setNewComment(e.target.value)} placeholder="Type a comment..." />
                                 <Button theme={theme} onClick={addComment}>Post</Button>
                             </div>
-                            <button onClick={() => setCommentTask(null)} className="w-full mt-2 text-xs text-gray-500 hover:underline">Close</button>
+                            <button onClick={() => setCommentTask(null)} className="w-full mt-2 text-xs text-slate-500 hover:underline">Close</button>
                         </Card>
                     </div>
                 )}
@@ -1019,7 +1029,7 @@ export default function App() {
                             onChange={e => setContent(e.target.value)} 
                             rows="18" 
                             disabled={isSubmitted} 
-                            className={`w-full p-5 rounded-2xl outline-none resize-y font-mono text-sm leading-relaxed ${darkMode ? 'bg-slate-800 text-white' : 'bg-white text-black'} border ${darkMode ? 'border-slate-700' : 'border-gray-200'} ${isSubmitted ? 'opacity-70 cursor-not-allowed' : ''}`} 
+                            className={`w-full p-5 rounded-2xl outline-none resize-y font-mono text-sm leading-relaxed border ${theme.input} ${isSubmitted ? 'opacity-70 cursor-not-allowed' : ''}`} 
                             placeholder="Use Markdown to structure your report abstract. Include your methodology, results, and conclusion here..." 
                         />
                     </Card>
@@ -1028,14 +1038,14 @@ export default function App() {
                             <h3 className={`text-lg font-bold ${theme.heading} mb-4 flex items-center`}><FileIcon className="w-5 h-5 mr-2 text-fuchsia-500"/> Supporting Files</h3>
                             <p className={`text-xs ${theme.textSecondary} mb-4`}>Submit Google Drive or MediaFire links for your project files.</p>
                             {!isSubmitted && (
-                                <div className={`border-2 border-dashed rounded-xl p-4 transition-colors mb-4 space-y-3 ${darkMode ? 'border-gray-700 bg-gray-800/20' : 'border-gray-300 bg-gray-50'}`}>
-                                    <Input 
+                                <div className={`border-2 border-dashed rounded-xl p-4 transition-colors mb-4 space-y-3 ${darkMode ? 'border-slate-700 bg-slate-800/20' : 'border-slate-300 bg-slate-50'}`}>
+                                    <Input theme={theme}
                                         value={fileNameInput} 
                                         onChange={e => setFileNameInput(e.target.value)} 
                                         placeholder="File Name (e.g., Final Presentation)" 
                                         className="text-sm"
                                     />
-                                    <Input 
+                                    <Input theme={theme}
                                         value={fileLinkInput} 
                                         onChange={e => setFileLinkInput(e.target.value)} 
                                         placeholder="File Link (GDrive/MediaFire)" 
@@ -1047,7 +1057,7 @@ export default function App() {
                                 </div>
                             )}
                             <ul className="space-y-3 max-h-60 overflow-y-auto pr-2">{files.map((f, i) => (
-                                <li key={i} className={`flex items-center justify-between p-3 rounded-lg group ${darkMode ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-50 border border-gray-100 hover:bg-gray-100'} transition-colors`}>
+                                <li key={i} className={`flex items-center justify-between p-3 rounded-lg group ${darkMode ? 'bg-slate-800 hover:bg-slate-700' : 'bg-slate-50 border border-slate-100 hover:bg-slate-100'} transition-colors`}>
                                     <div className="overflow-hidden flex-1">
                                         <div className="flex items-center">
                                             <p className={`text-sm font-medium ${theme.textPrimary} truncate flex-1`}>{f.name}</p>
@@ -1061,7 +1071,7 @@ export default function App() {
                                         const newFiles = files.filter((_, idx) => idx !== i);
                                         setFiles(newFiles);
                                         updateReport(content, [], newFiles, 'Draft');
-                                    }} className="text-gray-400 hover:text-rose-500 ml-2"><TrashIcon className="w-4 h-4"/></button>}
+                                    }} className="text-slate-400 hover:text-rose-500 ml-2"><TrashIcon className="w-4 h-4"/></button>}
                                 </li>
                             ))}</ul>
                         </Card>
@@ -1123,19 +1133,19 @@ export default function App() {
                 
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                     <Card theme={theme} className="lg:col-span-1 space-y-6 h-fit sticky top-24">
-                        <h3 className={`text-xl font-bold ${theme.heading} border-b pb-3 ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>Grade Project</h3>
+                        <h3 className={`text-xl font-bold ${theme.heading} border-b pb-3 ${darkMode ? 'border-slate-700' : 'border-slate-200'}`}>Grade Project</h3>
                         <div className="space-y-4">
                              <div className="space-y-2">
                                 <label className={`text-sm font-medium ${theme.textSecondary}`}>Innovation (0-40)</label>
-                                <Input type="number" min="0" max="40" value={evaluation.breakdown?.innovation || 0} onChange={e => handleGradeChange('innovation', e.target.value)} />
+                                <Input theme={theme} type="number" min="0" max="40" value={evaluation.breakdown?.innovation || 0} onChange={e => handleGradeChange('innovation', e.target.value)} />
                             </div>
                             <div className="space-y-2">
                                 <label className={`text-sm font-medium ${theme.textSecondary}`}>Execution (0-30)</label>
-                                <Input type="number" min="0" max="30" value={evaluation.breakdown?.execution || 0} onChange={e => handleGradeChange('execution', e.target.value)} />
+                                <Input theme={theme} type="number" min="0" max="30" value={evaluation.breakdown?.execution || 0} onChange={e => handleGradeChange('execution', e.target.value)} />
                             </div>
                             <div className="space-y-2">
                                 <label className={`text-sm font-medium ${theme.textSecondary}`}>Documentation (0-30)</label>
-                                <Input type="number" min="0" max="30" value={evaluation.breakdown?.documentation || 0} onChange={e => handleGradeChange('documentation', e.target.value)} />
+                                <Input theme={theme} type="number" min="0" max="30" value={evaluation.breakdown?.documentation || 0} onChange={e => handleGradeChange('documentation', e.target.value)} />
                             </div>
                             <div className={`p-3 rounded-xl ${darkMode ? 'bg-slate-800' : 'bg-slate-100'} flex justify-between items-center`}>
                                 <span className="font-bold">Total Score</span>
@@ -1148,7 +1158,7 @@ export default function App() {
                                     rows="6" 
                                     value={evaluation.feedback} 
                                     onChange={e => setEvaluation({...evaluation, feedback: e.target.value})} 
-                                    className={`w-full p-3 rounded-xl outline-none border ${darkMode ? 'bg-slate-800 text-white' : 'bg-white text-black'} border-slate-700`} 
+                                    className={`w-full p-3 rounded-xl outline-none border ${theme.input}`} 
                                     placeholder="Provide constructive feedback..."
                                 />
                             </div>
@@ -1158,7 +1168,7 @@ export default function App() {
                                     id="complete-check" 
                                     checked={isCompleted} 
                                     onChange={e => setEvaluation({...evaluation, status: e.target.checked ? 'Completed' : 'Pending'})}
-                                    className="w-4 h-4 text-cyan-600 border-gray-300 rounded focus:ring-cyan-500"
+                                    className="w-4 h-4 text-cyan-600 border-slate-300 rounded focus:ring-cyan-500"
                                 />
                                 <label htmlFor="complete-check" className={`text-sm font-medium ${theme.textPrimary}`}>Mark as Complete</label>
                             </div>
@@ -1170,7 +1180,7 @@ export default function App() {
 
                     <div className="lg:col-span-3 space-y-8">
                         <Card theme={theme} className="space-y-4">
-                            <h3 className={`text-2xl font-bold ${theme.heading} border-b pb-3 ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>Executive Summary</h3>
+                            <h3 className={`text-2xl font-bold ${theme.heading} border-b pb-3 ${darkMode ? 'border-slate-700' : 'border-slate-200'}`}>Executive Summary</h3>
                             <div className={`w-full p-5 rounded-xl min-h-[300px] font-mono text-sm leading-relaxed whitespace-pre-wrap ${theme.input} border`}>
                                 {project.report || "No report content submitted."}
                             </div>
@@ -1181,7 +1191,7 @@ export default function App() {
                                 <h3 className={`text-lg font-bold ${theme.heading} mb-4 flex items-center`}><FileIcon className="w-5 h-5 mr-2 text-cyan-500"/> Submitted Files</h3>
                                 <ul className="space-y-3">
                                     {(project.files || []).map((f, i) => (
-                                        <li key={i} className={`flex items-center justify-between p-3 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-50'}`}>
+                                        <li key={i} className={`flex items-center justify-between p-3 rounded-lg ${darkMode ? 'bg-slate-800' : 'bg-slate-50'}`}>
                                             <div className="overflow-hidden flex-1">
                                                 <div className="flex items-center justify-between">
                                                     <span className={`text-sm font-medium ${theme.textPrimary} truncate`}>{f.name}</span>
@@ -1260,9 +1270,9 @@ export default function App() {
                             <button onClick={downloadCSV} className="px-4 py-2 text-xs font-bold uppercase tracking-wider border border-cyan-500 text-cyan-500 rounded-lg hover:bg-cyan-50 dark:hover:bg-cyan-900/20 transition-colors flex items-center">
                                 <DownloadIcon className="w-4 h-4 mr-2"/> Export CSV
                             </button>
-                            <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+                            <div className="flex bg-slate-100 dark:bg-slate-800 rounded-lg p-1">
                                 {['analytics', 'projects', 'users'].map(t => (
-                                    <button key={t} onClick={() => setTab(t)} className={`px-4 py-2 rounded-md text-sm capitalize font-medium transition-all ${tab === t ? 'bg-white dark:bg-gray-700 shadow text-cyan-600' : theme.textSecondary}`}>{t}</button>
+                                    <button key={t} onClick={() => setTab(t)} className={`px-4 py-2 rounded-md text-sm capitalize font-medium transition-all ${tab === t ? 'bg-white dark:bg-slate-700 shadow text-cyan-600' : theme.textSecondary}`}>{t}</button>
                                 ))}
                             </div>
                         </div>
@@ -1273,10 +1283,10 @@ export default function App() {
                             <div className="text-center">
                                 <h3 className={`text-lg font-bold mb-4 ${theme.heading}`}>Project Status</h3>
                                 {/* Simple CSS/SVG Pie Chart */}
-                                <div className="relative w-48 h-48 mx-auto rounded-full border-8 border-gray-100 dark:border-gray-800 flex items-center justify-center">
+                                <div className="relative w-48 h-48 mx-auto rounded-full border-8 border-slate-100 dark:border-slate-800 flex items-center justify-center">
                                     <div className="text-center">
                                         <span className="block text-3xl font-black text-cyan-500">{Math.round((projects.filter(p => p.reportStatus === 'Submitted').length / (projects.length || 1)) * 100)}%</span>
-                                        <span className="text-xs text-gray-500">Completion Rate</span>
+                                        <span className="text-xs text-slate-500">Completion Rate</span>
                                     </div>
                                     <svg className="absolute top-0 left-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
                                         <circle cx="50" cy="50" r="40" fill="none" stroke="#06b6d4" strokeWidth="8" strokeDasharray={`${(projects.filter(p => p.reportStatus === 'Submitted').length / (projects.length || 1)) * 251} 251`} strokeLinecap="round" />
@@ -1287,7 +1297,7 @@ export default function App() {
                                 <h3 className={`text-lg font-bold mb-4 ${theme.heading}`}>Top Performers</h3>
                                 <div className="space-y-3">
                                     {projects.sort((a,b) => (b.evaluation?.score || 0) - (a.evaluation?.score || 0)).slice(0, 5).map((p, i) => (
-                                        <div key={p.id} className="flex items-center justify-between p-2 border-b dark:border-gray-800">
+                                        <div key={p.id} className="flex items-center justify-between p-2 border-b dark:border-slate-800">
                                             <div className="flex items-center gap-3">
                                                 <span className="font-mono text-cyan-500 text-lg">#{i+1}</span>
                                                 <span className={theme.textPrimary}>{p.name}</span>
@@ -1304,7 +1314,7 @@ export default function App() {
                         <div className="overflow-x-auto">
                             <table className="w-full text-left">
                                 <thead>
-                                    <tr className={`border-b ${darkMode ? 'border-gray-700 text-gray-300' : 'border-gray-200 text-gray-500'} text-sm uppercase`}>
+                                    <tr className={`border-b ${darkMode ? 'border-slate-700 text-slate-300' : 'border-slate-200 text-slate-500'} text-sm uppercase`}>
                                         <th className="pb-3 pl-4">Project</th>
                                         <th className="pb-3 hidden sm:table-cell">Supervisor</th>
                                         <th className="pb-3 hidden md:table-cell">Status</th>
@@ -1314,21 +1324,21 @@ export default function App() {
                                 </thead>
                                 <tbody className={`text-sm ${theme.textPrimary}`}>
                                     {projects.map(p => (
-                                        <tr key={p.id} className={`border-b last:border-0 ${darkMode ? 'border-gray-800 hover:bg-gray-800/50' : 'border-gray-100 hover:bg-gray-50'} transition-colors`}>
+                                        <tr key={p.id} className={`border-b last:border-0 ${darkMode ? 'border-slate-800 hover:bg-slate-800/50' : 'border-slate-100 hover:bg-slate-50'} transition-colors`}>
                                             <td className="py-4 pl-4 font-medium">
                                                 {p.name}
-                                                {showRawData && <div className="mt-1 text-[10px] font-mono text-gray-500 bg-gray-900/50 p-1 rounded max-w-xs truncate">{JSON.stringify(p)}</div>}
+                                                {showRawData && <div className="mt-1 text-[10px] font-mono text-slate-500 bg-slate-900/50 p-1 rounded max-w-xs truncate">{JSON.stringify(p)}</div>}
                                             </td>
                                             <td className={`py-4 hidden sm:table-cell ${theme.textSecondary}`}>
                                                 <input 
-                                                    className="bg-transparent border-b border-transparent hover:border-cyan-500 focus:border-cyan-500 outline-none w-32 transition-colors" 
+                                                    className="bg-transparent border-b border-transparent hover:border-cyan-500 focus:border-cyan-500 outline-none w-32 transition-colors placeholder-slate-500" 
                                                     placeholder="Unassigned" 
                                                     defaultValue={p.supervisor || ''}
                                                     onBlur={(e) => assignSupervisor(p.id, e.target.value)}
                                                 />
                                             </td>
                                             <td className="py-4 hidden md:table-cell">
-                                                <span className={`px-2 py-1 rounded-full text-xs font-semibold ${p.reportStatus === 'Submitted' ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300' : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'}`}>
+                                                <span className={`px-2 py-1 rounded-full text-xs font-semibold ${p.reportStatus === 'Submitted' ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300' : 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300'}`}>
                                                     {p.reportStatus || 'Draft'}
                                                 </span>
                                             </td>
@@ -1346,7 +1356,7 @@ export default function App() {
                                     ))}
                                 </tbody>
                             </table>
-                            <div className="mt-4 pt-4 border-t border-gray-700 flex justify-end">
+                            <div className="mt-4 pt-4 border-t border-slate-700 flex justify-end">
                                 <button onClick={() => setShowRawData(!showRawData)} className={`flex items-center text-xs ${theme.textSecondary} hover:text-cyan-500`}>
                                     <CodeIcon className="w-3 h-3 mr-1"/> {showRawData ? 'Hide Raw Data' : 'Inspect Raw Data'}
                                 </button>
@@ -1358,7 +1368,7 @@ export default function App() {
                         <div className="overflow-x-auto">
                             <table className="w-full text-left">
                                 <thead>
-                                    <tr className={`border-b ${darkMode ? 'border-gray-700 text-gray-300' : 'border-gray-200 text-gray-500'} text-sm uppercase`}>
+                                    <tr className={`border-b ${darkMode ? 'border-slate-700 text-slate-300' : 'border-slate-200 text-slate-500'} text-sm uppercase`}>
                                         <th className="pb-3 pl-4">User Name</th>
                                         <th className="pb-3">Email</th>
                                         <th className="pb-3">Role</th>
@@ -1367,13 +1377,13 @@ export default function App() {
                                 </thead>
                                 <tbody className={`text-sm ${theme.textPrimary}`}>
                                     {allUsers.map(u => (
-                                        <tr key={u.id} className={`border-b last:border-0 ${darkMode ? 'border-gray-800' : 'border-gray-100'}`}>
+                                        <tr key={u.id} className={`border-b last:border-0 ${darkMode ? 'border-slate-800' : 'border-slate-100'}`}>
                                             <td className="py-4 pl-4 flex items-center gap-3">
-                                                <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-xs font-bold">{u.displayName?.charAt(0)}</div>
+                                                <div className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold">{u.displayName?.charAt(0)}</div>
                                                 {u.displayName}
                                             </td>
                                             <td className={`py-4 ${theme.textSecondary}`}>{u.email}</td>
-                                            <td className="py-4"><span className="px-2 py-1 rounded text-xs bg-gray-800 text-gray-300">{u.title}</span></td>
+                                            <td className="py-4"><span className="px-2 py-1 rounded text-xs bg-slate-800 text-slate-300">{u.title}</span></td>
                                             <td className="py-4 text-right pr-4">
                                                 <button onClick={() => deleteUser(u.id)} className="text-rose-500 hover:bg-rose-900/20 p-2 rounded-xl"><TrashIcon className="w-4 h-4" /></button>
                                             </td>
@@ -1391,11 +1401,11 @@ export default function App() {
                             <h3 className={`text-xl font-bold ${theme.heading}`}>Edit Project</h3>
                             <div>
                                 <label className="text-xs font-medium mb-1 block">Project Name</label>
-                                <Input value={editProject.name} onChange={e => setEditProject({...editProject, name: e.target.value})} />
+                                <Input theme={theme} value={editProject.name} onChange={e => setEditProject({...editProject, name: e.target.value})} />
                             </div>
                             <div>
                                 <label className="text-xs font-medium mb-1 block">Team Name</label>
-                                <Input value={editProject.teamName} onChange={e => setEditProject({...editProject, teamName: e.target.value})} />
+                                <Input theme={theme} value={editProject.teamName} onChange={e => setEditProject({...editProject, teamName: e.target.value})} />
                             </div>
                             <div className="flex justify-end gap-2 mt-4">
                                 <Button theme={theme} variant="secondary" onClick={() => setEditProject(null)}>Cancel</Button>
@@ -1409,23 +1419,26 @@ export default function App() {
     };
 
     const Dashboard = () => {
+        // -- NEW STATE FOR POPUP --
+        const [showTeamModal, setShowTeamModal] = useState(false);
+
+        // 1. Handle Invitations
         if (userTeam) {
             const myStatus = userTeam.members.find(m => m.email === userEmail || m.id === userId)?.status;
-            
             if (myStatus === 'pending') {
                 return (
-                    <div className="max-w-2xl mx-auto mt-10">
-                        <Card theme={theme} className="text-center p-10 border-l-4 border-indigo-500">
-                            <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6 text-indigo-600">
+                    <div className="max-w-2xl mx-auto mt-10 animate-fade-in">
+                        <Card theme={theme} className="text-center p-10 border-t-4 border-indigo-500">
+                            <div className="w-20 h-20 bg-indigo-50 dark:bg-indigo-900/20 rounded-full flex items-center justify-center mx-auto mb-6 text-indigo-600 dark:text-indigo-400">
                                 <MailIcon className="w-10 h-10" />
                             </div>
                             <h2 className={`text-3xl font-bold ${theme.heading} mb-2`}>Project Proposal Received</h2>
-                            <p className={`text-lg ${theme.textSecondary} mb-6`}>
-                                You have been invited to join <span className="font-bold text-fuchsia-500">{userTeam.teamName}</span> for the project <span className="font-bold text-fuchsia-500">{userTeam.name}</span>.
+                            <p className={`text-lg ${theme.textSecondary} mb-8 max-w-md mx-auto`}>
+                                You have been invited to join <span className="font-bold text-indigo-600 dark:text-indigo-400">{userTeam.teamName}</span> for the project <span className="font-bold text-indigo-600 dark:text-indigo-400">{userTeam.name}</span>.
                             </p>
-                            <div className="flex justify-center gap-4">
-                                <Button theme={theme} onClick={acceptInvite} className="px-8 py-3">Accept Proposal</Button>
-                                <Button theme={theme} variant="secondary" onClick={declineInvite} className="px-8 py-3 text-rose-500 dark:hover:bg-rose-900/20">Decline</Button>
+                            <div className="flex flex-col sm:flex-row justify-center gap-4">
+                                <Button theme={theme} onClick={acceptInvite} className="w-full sm:w-auto">Accept Proposal</Button>
+                                <Button theme={theme} variant="secondary" onClick={declineInvite} className="w-full sm:w-auto text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/20">Decline</Button>
                             </div>
                         </Card>
                     </div>
@@ -1433,91 +1446,211 @@ export default function App() {
             }
         }
 
-        return (
-            <div className="space-y-8">
-                <Card theme={theme} className={`flex flex-col md:flex-row gap-6 p-8 ${isUserAdmin ? 'bg-gradient-to-br from-cyan-700 to-teal-800' : 'bg-gradient-to-br from-violet-700 to-fuchsia-800'} !border-none text-white relative overflow-hidden h-60 md:h-72 items-center`}>
-                    <div className="absolute right-0 bottom-0 opacity-10 transform translate-y-1/3 translate-x-1/4"><DatabaseIcon width="300" height="300" /></div>
-                    
-                    <div className="relative z-10 flex-1">
-                        <h2 className="text-4xl font-extrabold mb-2">Hello, {userName}!</h2>
-                        <p className={`${isUserAdmin ? 'text-cyan-200' : 'text-fuchsia-200'} text-lg`}>
-                            {userTeam 
-                                ? (isTeamActive ? `Tracking active project: ${userTeam.name}` : `Waiting for team assembly...`) 
-                                : (isUserAdmin ? 'Welcome to the Admin Control Center.' : 'Ready to start your next academic project?')}
-                        </p>
-                        {!userTeam && !isUserAdmin && <Button theme={theme} onClick={() => setCurrentView(VIEWS.REGISTRATION)} className="mt-8 bg-white text-indigo-700 hover:bg-indigo-50 shadow-none hover:shadow-lg">Start Project Now <PlusIcon className="w-5 h-5"/></Button>}
-                        {!isUserAdmin && userTeam && isTeamActive && <Button theme={theme} onClick={() => setCurrentView(VIEWS.TRACKING)} className="mt-8 bg-white text-indigo-700 hover:bg-indigo-50 shadow-none hover:shadow-lg">Go to Project <ProgressIcon className="w-5 h-5"/></Button>}
-                         {isUserAdmin && <Button theme={theme} onClick={() => setCurrentView(VIEWS.ADMIN)} className="mt-8 bg-white text-cyan-700 hover:bg-cyan-50 shadow-none hover:shadow-lg">Open Admin Console <ShieldIcon className="w-5 h-5"/></Button>}
-                    </div>
-
-                    <div className="hidden md:grid grid-cols-2 gap-4 w-full md:w-auto md:space-y-0 relative z-10">
-                        <div className="p-4 bg-white/10 rounded-xl backdrop-blur-sm text-center">
-                            <h3 className="text-3xl font-bold">{projects.length}</h3>
-                            <p className={`text-xs ${isUserAdmin ? 'text-cyan-200' : 'text-fuchsia-200'}`}>Total Projects</p>
-                        </div>
-                        <div className="p-4 bg-white/10 rounded-xl backdrop-blur-sm text-center">
-                            <h3 className="text-3xl font-bold">{projects.reduce((a,b)=>a + (b.members?.length||0),0)}</h3>
-                            <p className={`text-xs ${isUserAdmin ? 'text-cyan-200' : 'text-fuchsia-200'}`}>Total Students</p>
-                        </div>
-                    </div>
-                </Card>
-
-                {userTeam && (
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <Card theme={theme} className="lg:col-span-2">
-                            <div className="flex justify-between items-start mb-6">
-                                <div>
-                                    <h3 className={`text-2xl font-bold ${theme.heading}`}>{userTeam.name}</h3>
-                                    <p className={`${theme.textSecondary} text-base`}>Team: {userTeam.teamName}</p>
-                                </div>
-                                <span className={`px-3 py-1.5 rounded-full text-xs font-bold ${userTeam.evaluation.status === 'Completed' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300'}`}>
-                                    {userTeam.evaluation.status}
-                                </span>
+        // 2. No Project / Admin State
+        if (!userTeam) {
+             return (
+                <div className="space-y-8 animate-fade-in">
+                    <Card theme={theme} className={`flex flex-col md:flex-row gap-8 p-10 ${isUserAdmin ? 'bg-gradient-to-br from-cyan-800 to-slate-900' : 'bg-gradient-to-br from-indigo-800 to-slate-900'} !border-none text-white relative overflow-hidden min-h-[300px] items-center`}>
+                        <div className="absolute right-0 bottom-0 opacity-10 transform translate-y-1/4 translate-x-1/4"><DatabaseIcon width="400" height="400" /></div>
+                        <div className="relative z-10 flex-1 space-y-4">
+                            <div className="inline-block px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-bold tracking-wide uppercase">
+                                {isUserAdmin ? 'Admin Console' : 'Student Portal'}
                             </div>
-                             {!isTeamActive && (
-                                <div className="mb-6 p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-center gap-3 text-amber-600 dark:text-amber-300">
-                                    <ClockIcon className="w-5 h-5 flex-shrink-0" />
-                                    <span className="text-sm font-medium">Team formation in progress. All features are locked until everyone accepts.</span>
+                            <h2 className="text-5xl font-extrabold tracking-tight">Welcome, {userName.split(' ')[0]}!</h2>
+                            <p className="text-indigo-100 text-lg max-w-xl leading-relaxed">
+                                {isUserAdmin 
+                                    ? 'Manage submissions, grade projects, and oversee student progress from your central command center.' 
+                                    : 'You are not currently assigned to a project. Register a new team or wait for an invitation to begin.'}
+                            </p>
+                            <div className="pt-4">
+                                {!isUserAdmin && <Button theme={theme} onClick={() => setCurrentView(VIEWS.REGISTRATION)} className="bg-white text-indigo-900 hover:bg-indigo-50 border-none shadow-xl">Start New Project <PlusIcon className="w-5 h-5"/></Button>}
+                                {isUserAdmin && <Button theme={theme} onClick={() => setCurrentView(VIEWS.ADMIN)} className="bg-white text-cyan-900 hover:bg-cyan-50 border-none shadow-xl">Go to Analytics <ShieldIcon className="w-5 h-5"/></Button>}
+                            </div>
+                        </div>
+                    </Card>
+                    {/* Admin Quick Stats Grid */}
+                    {isUserAdmin && (
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            {[
+                                { label: 'Active Projects', val: projects.length, icon: DatabaseIcon, color: 'text-cyan-500' },
+                                { label: 'Total Users', val: allUsers.length, icon: UsersIcon, color: 'text-teal-500' },
+                                { label: 'Pending Reviews', val: projects.filter(p => p.reportStatus === 'Submitted' && p.evaluation?.status !== 'Completed').length, icon: EvaluateIcon, color: 'text-amber-500' }
+                            ].map((stat, i) => (
+                                <Card theme={theme} key={i} className="flex items-center gap-4">
+                                    <div className={`p-4 rounded-2xl bg-slate-100 dark:bg-slate-800 ${stat.color}`}><stat.icon className="w-8 h-8"/></div>
+                                    <div><div className="text-3xl font-black">{stat.val}</div><div className={`text-sm font-medium ${theme.textSecondary}`}>{stat.label}</div></div>
+                                </Card>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // 3. Active Student Dashboard Logic
+        const myTasks = (userTeam.tasks || []).filter(t => t.assigneeId === userId && !t.completed);
+        const nextDeadline = (userTeam.tasks || []).filter(t => !t.completed && t.dueDate).sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate))[0];
+        const recentFiles = (userTeam.files || []).slice(-3).reverse();
+        const completedCount = (userTeam.tasks || []).filter(t => t.completed).length;
+        const totalCount = (userTeam.tasks || []).length || 1;
+        const progress = Math.round((completedCount / totalCount) * 100);
+
+        return (
+            <div className="space-y-6 animate-fade-in">
+                {/* Hero Section */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <Card theme={theme} className="lg:col-span-2 !p-8 relative overflow-hidden flex flex-col justify-between min-h-[240px] bg-gradient-to-r from-indigo-600 to-violet-600 border-none dark:from-indigo-900 dark:to-slate-900">
+                        <div className="absolute top-0 right-0 p-4 opacity-10"><LayoutIcon width="250" height="250" className="text-white"/></div>
+                        <div className="relative z-10">
+                            <div className="flex items-center gap-2 mb-2 text-indigo-100">
+                                <span className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold">{userTeam.teamName}</span>
+                                <span className="text-xs">•</span>
+                                <span className="text-xs font-medium">{isTeamActive ? 'Active' : 'Forming'}</span>
+                            </div>
+                            <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">{userTeam.name}</h2>
+                            <p className="text-indigo-100 max-w-lg line-clamp-2">{userTeam.description || "No description provided."}</p>
+                        </div>
+                        <div className="relative z-10 mt-8">
+                             <div className="flex items-center justify-between text-white text-sm mb-2 font-medium">
+                                <span>Project Completion</span>
+                                <span>{progress}%</span>
+                            </div>
+                            <div className="w-full h-3 bg-black/20 rounded-full overflow-hidden">
+                                <div className="h-full bg-white shadow-lg transition-all duration-1000 ease-out" style={{ width: `${progress}%` }}></div>
+                            </div>
+                        </div>
+                    </Card>
+
+                    <div className="grid grid-cols-1 gap-6">
+                        <Card theme={theme} className="flex flex-col justify-center">
+                            <h3 className={`text-sm font-bold uppercase tracking-wider ${theme.textSecondary} mb-4`}>My Pending Tasks</h3>
+                            <div className="flex items-baseline gap-2">
+                                <span className={`text-5xl font-black ${theme.textPrimary}`}>{myTasks.length}</span>
+                                <span className={`text-sm ${theme.textSecondary}`}>tasks remaining</span>
+                            </div>
+                            {nextDeadline && (
+                                <div className="mt-4 p-3 bg-rose-50 dark:bg-rose-900/10 border border-rose-100 dark:border-rose-900/30 rounded-xl flex items-start gap-3">
+                                    <ClockIcon className="w-5 h-5 text-rose-500 shrink-0" />
+                                    <div>
+                                        <p className="text-xs text-rose-600 dark:text-rose-400 font-bold uppercase">Next Deadline</p>
+                                        <p className={`text-sm font-medium ${theme.textPrimary}`}>{nextDeadline.title}</p>
+                                        <p className="text-xs text-slate-500">{new Date(nextDeadline.dueDate).toLocaleDateString()}</p>
+                                    </div>
                                 </div>
                             )}
-                            <div className="space-y-4">
-                                <div>
-                                    <div className="flex justify-between text-sm mb-2">
-                                        <span className={theme.textSecondary}>Task Completion</span>
-                                        <span className={theme.textPrimary}>
-                                            {Math.round(((userTeam.tasks || []).filter(t => t.completed).length / ((userTeam.tasks || []).length || 1)) * 100)}%
-                                        </span>
+                        </Card>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Left Col: Quick Actions & My Tasks */}
+                    <div className="lg:col-span-2 space-y-6">
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                             {[
+                                { label: 'Tasks', icon: PlusIcon, action: () => setCurrentView(VIEWS.TRACKING), bg: 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400' },
+                                { label: 'Upload', icon: FileIcon, action: () => setCurrentView(VIEWS.REPORTS), bg: 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/20 dark:text-emerald-400' },
+                                { label: 'Team', icon: UsersIcon, action: () => setShowTeamModal(true), bg: 'bg-violet-50 text-violet-600 dark:bg-violet-900/20 dark:text-violet-400' },
+                                { label: 'Report', icon: ReportIcon, action: () => setCurrentView(VIEWS.REPORTS), bg: 'bg-amber-50 text-amber-600 dark:bg-amber-900/20 dark:text-amber-400' },
+                             ].map((btn, i) => (
+                                 <button key={i} onClick={btn.action} className={`p-4 rounded-2xl flex flex-col items-center justify-center gap-2 transition-all hover:scale-105 hover:shadow-lg ${theme.card}`}>
+                                     <div className={`p-3 rounded-full ${btn.bg}`}><btn.icon className="w-6 h-6"/></div>
+                                     <span className={`text-xs font-bold ${theme.textPrimary}`}>{btn.label}</span>
+                                 </button>
+                             ))}
+                        </div>
+
+                        {/* -- TEAM MODAL -- */}
+                        {showTeamModal && (
+                            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShowTeamModal(false)}>
+                                <div className={`w-full max-w-sm p-6 rounded-2xl shadow-2xl ${theme.card} relative`} onClick={e => e.stopPropagation()}>
+                                    <h3 className={`text-xl font-bold mb-4 ${theme.heading}`}>Team Roster</h3>
+                                    <div className="space-y-3">
+                                        {userTeam.members.map((m, i) => (
+                                            <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800">
+                                                <div className="flex items-center gap-3">
+                                                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-xs ${m.role === 'Lead' ? 'bg-indigo-500' : 'bg-slate-400'}`}>
+                                                        {m.name.charAt(0)}
+                                                    </div>
+                                                    <div>
+                                                        <p className={`text-sm font-bold ${theme.textPrimary}`}>{m.name}</p>
+                                                        <p className="text-[10px] text-slate-500">{m.email}</p>
+                                                    </div>
+                                                </div>
+                                                <span className={`text-[10px] px-2 py-1 rounded ${m.status === 'accepted' ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-600'}`}>{m.role}</span>
+                                            </div>
+                                        ))}
                                     </div>
-                                    <div className="w-full h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden shadow-inner">
-                                        <div className="h-full bg-gradient-to-r from-violet-500 to-fuchsia-500 transition-all duration-700" style={{ width: `${((userTeam.tasks || []).filter(t => t.completed).length / ((userTeam.tasks || []).length || 1)) * 100}%` }}></div>
-                                    </div>
+                                    <button onClick={() => setShowTeamModal(false)} className="mt-6 w-full py-3 rounded-xl bg-slate-100 dark:bg-slate-800 font-bold text-sm hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">Close</button>
                                 </div>
-                                <Button theme={theme} onClick={() => setCurrentView(VIEWS.REPORTS)} className="w-full" variant="secondary" disabled={!isTeamActive}>
-                                    <ReportIcon className="w-5 h-5 mr-2"/> {userTeam.reportStatus === 'Submitted' ? 'View Final Report' : 'Draft Report / Submission'}
-                                </Button>
+                            </div>
+                        )}
+                        {/* -- END TEAM MODAL -- */}
+
+                        <Card theme={theme}>
+                            <div className="flex justify-between items-center mb-6">
+                                <h3 className={`text-lg font-bold ${theme.heading}`}>My Priority List</h3>
+                                <Button theme={theme} variant="secondary" onClick={() => setCurrentView(VIEWS.TRACKING)} className="!py-2 !px-4 text-xs">View Kanban</Button>
+                            </div>
+                            {myTasks.length === 0 ? (
+                                <div className="text-center py-12 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl">
+                                    <div className="inline-block p-4 rounded-full bg-emerald-50 dark:bg-emerald-900/20 text-emerald-500 mb-2"><CheckCircleIcon className="w-8 h-8"/></div>
+                                    <p className={theme.textSecondary}>You're all caught up! No pending tasks.</p>
+                                </div>
+                            ) : (
+                                <div className="space-y-3">
+                                    {myTasks.slice(0, 4).map(t => (
+                                        <div key={t.id} className={`p-4 rounded-xl border flex items-center gap-4 hover:shadow-md transition-shadow ${theme.card} ${darkMode ? 'border-slate-800' : 'border-slate-100'}`}>
+                                            <div className={`w-2 h-12 rounded-full ${t.status === 'In Progress' ? 'bg-amber-500' : 'bg-slate-300 dark:bg-slate-700'}`}></div>
+                                            <div className="flex-1">
+                                                <h4 className={`font-bold ${theme.textPrimary}`}>{t.title}</h4>
+                                                <p className="text-xs text-slate-500">Due: {t.dueDate} • {t.status || 'To Do'}</p>
+                                            </div>
+                                            <button onClick={() => setCurrentView(VIEWS.TRACKING)} className="p-2 text-slate-400 hover:text-indigo-500"><LinkExternalIcon className="w-5 h-5"/></button>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </Card>
+                    </div>
+
+                    {/* Right Col: Activity & Files */}
+                    <div className="space-y-6">
+                        <Card theme={theme}>
+                            <h3 className={`text-lg font-bold ${theme.heading} mb-4`}>Recent Files</h3>
+                            {recentFiles.length === 0 ? (
+                                <p className={`text-sm ${theme.textSecondary}`}>No files uploaded yet.</p>
+                            ) : (
+                                <ul className="space-y-4">
+                                    {recentFiles.map((f, i) => (
+                                        <li key={i} className="flex items-center gap-3">
+                                            <div className="p-2 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 rounded-lg"><FileIcon className="w-5 h-5"/></div>
+                                            <div className="flex-1 overflow-hidden">
+                                                <p className={`text-sm font-medium truncate ${theme.textPrimary}`}>{f.name}</p>
+                                                <p className="text-[10px] text-slate-500">{f.date}</p>
+                                            </div>
+                                            <a href={f.url} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-indigo-500"><DownloadIcon className="w-4 h-4"/></a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                            <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800">
+                                <button onClick={() => setCurrentView(VIEWS.REPORTS)} className={`text-sm font-medium ${isUserAdmin ? 'text-cyan-500' : 'text-indigo-500'} hover:underline`}>Go to Repository →</button>
                             </div>
                         </Card>
 
-                        <Card theme={theme}>
-                            <h3 className={`text-lg font-bold ${theme.heading} mb-4 border-b pb-3 ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>Team Roster</h3>
-                            <ul className="space-y-4">
-                                {userTeam.members.map((m, i) => (
-                                    <li key={i} className="flex items-center justify-between text-sm">
-                                        <div className="flex items-center gap-3">
-                                            <div className={`w-3 h-3 rounded-full ${m.status === 'accepted' ? 'bg-emerald-500' : 'bg-amber-500'}`}></div>
-                                            <span className={m.status === 'accepted' ? theme.textPrimary : theme.textSecondary}>
-                                                {m.name === "Invited User" ? m.email : m.name}
-                                            </span>
-                                        </div>
-                                        <span className={`text-xs font-medium ${m.status === 'accepted' ? 'text-emerald-500' : 'text-amber-500'}`}>
-                                            {m.status}
-                                        </span>
-                                    </li>
-                                ))}
-                            </ul>
+                         <Card theme={theme}>
+                            <h3 className={`text-lg font-bold ${theme.heading} mb-4`}>Team Status</h3>
+                             <div className="flex items-center justify-between mb-2">
+                                <span className={`text-sm ${theme.textSecondary}`}>Evaluation</span>
+                                <span className={`text-xs font-bold px-2 py-1 rounded ${userTeam.evaluation.status === 'Completed' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'}`}>{userTeam.evaluation.status}</span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                                <span className={`text-sm ${theme.textSecondary}`}>Report</span>
+                                <span className={`text-xs font-bold px-2 py-1 rounded ${userTeam.reportStatus === 'Submitted' ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'}`}>{userTeam.reportStatus || 'Draft'}</span>
+                            </div>
                         </Card>
                     </div>
-                )}
+                </div>
             </div>
         );
     };
@@ -1545,10 +1678,13 @@ export default function App() {
                     <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className={`md:hidden p-2 rounded-lg ${theme.navItem}`}>
                         {isMobileMenuOpen ? <XIcon className="w-6 h-6" /> : <MenuIcon className="w-6 h-6" />}
                     </button>
-                    <div className="flex items-center gap-3">
+                    <button 
+                        onClick={() => setCurrentView(VIEWS.DASHBOARD)} 
+                        className="flex items-center gap-3 hover:opacity-80 transition-opacity focus:outline-none"
+                    >
                         <img src="/logo.png" alt="Acadex" className="h-10 w-auto object-contain" />
                         <span className={`font-extrabold text-xl ${theme.heading}`}>Acadex</span>
-                    </div>
+                    </button>
                 </div>
 
                 <nav className="hidden md:flex items-center space-x-2">
@@ -1561,16 +1697,16 @@ export default function App() {
                     
                     {/* Notification Bell */}
                     <div className="relative">
-                        <button onClick={() => setShowNotifications(!showNotifications)} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors relative">
+                        <button onClick={() => setShowNotifications(!showNotifications)} className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors relative">
                             <BellIcon className="w-5 h-5" />
                             {notifications.length > 0 && <span className="absolute top-1 right-1 w-2 h-2 bg-rose-500 rounded-full"></span>}
                         </button>
                         
                         {showNotifications && (
-                            <div className="absolute right-0 top-12 w-64 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 p-4 z-50">
+                            <div className="absolute right-0 top-12 w-64 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-100 dark:border-slate-700 p-4 z-50">
                                 <h4 className="text-sm font-bold mb-2">Notifications</h4>
                                 {notifications.length === 0 ? (
-                                    <p className="text-xs text-gray-500">No new alerts.</p>
+                                    <p className="text-xs text-slate-500">No new alerts.</p>
                                 ) : (
                                     <ul className="space-y-2">
                                         {notifications.map(n => (
@@ -1588,7 +1724,7 @@ export default function App() {
                     
                     <div 
                         onClick={() => setCurrentView(VIEWS.PROFILE)}
-                        className="flex items-center gap-3 pl-3 border-l border-slate-700/50 dark:border-gray-700 cursor-pointer hover:opacity-80 transition-opacity"
+                        className="flex items-center gap-3 pl-3 border-l border-slate-700/50 dark:border-slate-700 cursor-pointer hover:opacity-80 transition-opacity"
                     >
                          <div className="text-right hidden lg:block">
                             <p className={`text-sm font-bold ${theme.textPrimary}`}>{userName}</p>
@@ -1657,7 +1793,7 @@ export default function App() {
                                                 <span className={theme.textSecondary}>Task Progress</span>
                                                 <span className={theme.textPrimary}>{Math.round(progress)}%</span>
                                             </div>
-                                            <div className="w-full bg-gray-200 dark:bg-gray-700 h-2 rounded-full overflow-hidden shadow-inner">
+                                            <div className="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden shadow-inner">
                                                 <div className="h-full bg-gradient-to-r from-violet-500 to-fuchsia-500 transition-all duration-700" style={{width: `${progress}%`}}></div>
                                             </div>
                                         </Card>
@@ -1672,7 +1808,7 @@ export default function App() {
                             <h1 className={`text-4xl font-extrabold mb-8 ${theme.heading}`}>Evaluation Results</h1>
                             <h2 className={`text-xl font-bold mb-8 ${theme.heading} text-fuchsia-500`}>{userTeam.name}</h2>
                             <Card theme={theme}>
-                                <div className={`p-8 rounded-2xl text-center ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+                                <div className={`p-8 rounded-2xl text-center ${darkMode ? 'bg-slate-900' : 'bg-slate-50'}`}>
                                     <EvaluateIcon className="w-12 h-12 mx-auto text-fuchsia-500 mb-4"/>
                                     <p className={`text-lg font-medium ${theme.textPrimary} mb-4`}>{userTeam.evaluation.status}</p>
                                     <div className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-violet-500 to-fuchsia-600 mb-6">
@@ -1681,23 +1817,23 @@ export default function App() {
 
                                     {userTeam.evaluation.breakdown && (
                                         <div className="grid grid-cols-3 gap-4 mb-8 max-w-md mx-auto">
-                                            <div className="p-3 bg-gray-800/50 rounded-lg">
-                                                <div className="text-xs text-gray-400 uppercase">Innovation</div>
-                                                <div className="text-xl font-bold text-white">{userTeam.evaluation.breakdown.innovation || 0}</div>
+                                            <div className={`p-3 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200 shadow-sm'}`}>
+                                                <div className={`text-[10px] font-bold uppercase tracking-wider ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Innovation</div>
+                                                <div className={`text-2xl font-black ${darkMode ? 'text-white' : 'text-slate-800'}`}>{userTeam.evaluation.breakdown.innovation || 0}</div>
                                             </div>
-                                            <div className="p-3 bg-gray-800/50 rounded-lg">
-                                                <div className="text-xs text-gray-400 uppercase">Execution</div>
-                                                <div className="text-xl font-bold text-white">{userTeam.evaluation.breakdown.execution || 0}</div>
+                                            <div className={`p-3 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200 shadow-sm'}`}>
+                                                <div className={`text-[10px] font-bold uppercase tracking-wider ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Execution</div>
+                                                <div className={`text-2xl font-black ${darkMode ? 'text-white' : 'text-slate-800'}`}>{userTeam.evaluation.breakdown.execution || 0}</div>
                                             </div>
-                                            <div className="p-3 bg-gray-800/50 rounded-lg">
-                                                <div className="text-xs text-gray-400 uppercase">Docs</div>
-                                                <div className="text-xl font-bold text-white">{userTeam.evaluation.breakdown.documentation || 0}</div>
+                                            <div className={`p-3 rounded-xl border ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200 shadow-sm'}`}>
+                                                <div className={`text-[10px] font-bold uppercase tracking-wider ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Docs</div>
+                                                <div className={`text-2xl font-black ${darkMode ? 'text-white' : 'text-slate-800'}`}>{userTeam.evaluation.breakdown.documentation || 0}</div>
                                             </div>
                                         </div>
                                     )}
                                     
-                                    <div className={`text-left p-6 rounded-xl ${darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'}`}>
-                                        <p className={`text-sm font-bold ${theme.textSecondary} uppercase mb-3 border-b pb-2 ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>Instructor Feedback</p>
+                                    <div className={`text-left p-6 rounded-xl ${darkMode ? 'bg-slate-800 border border-slate-700' : 'bg-white border border-slate-200'}`}>
+                                        <p className={`text-sm font-bold ${theme.textSecondary} uppercase mb-3 border-b pb-2 ${darkMode ? 'border-slate-700' : 'border-slate-200'}`}>Instructor Feedback</p>
                                         <p className={theme.textPrimary}>{userTeam.evaluation.feedback}</p>
                                     </div>
                                 </div>
