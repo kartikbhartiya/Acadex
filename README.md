@@ -1,6 +1,7 @@
+
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,12,20&height=200&section=header&text=Acadex&fontSize=70&fontColor=ffffff&animation=twinkling&fontAlignY=35&desc=Student%20Academic%20Project%20Management%20System&descAlignY=55&descSize=20" />
+<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,12,20&height=200&section=header&text=AcadEx&fontSize=70&fontColor=ffffff&animation=twinkling&fontAlignY=35&desc=Student%20Academic%20Project%20Management%20System&descAlignY=55&descSize=20" />
 
 # 🎓 Student Academic Project Management System
 
@@ -495,7 +496,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## 👨‍💻 Authors
 
-Created with ❤️ by Sanchit and Kartik
+Created with ❤️ by the Academic Project Management Team
 
 ---
 
@@ -512,8 +513,8 @@ Created with ❤️ by Sanchit and Kartik
 
 Need help? Reach out:
 
-- 📧 Email: notyouravgsulphur@gmail.com
-- 🐛 Issues: [Report Bug](https://github.com/xsanchitgupta/Acadex/issues)
+- 📧 Email: support@acadex.edu
+- 🐛 Issues: [Report Bug](https://github.com/kartikbhartiya/Acadext/issues)
 
 ---
 
