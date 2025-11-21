@@ -58,11 +58,18 @@ const XIcon = (props) => <Icon {...props}><line x1="18" y1="6" x2="6" y2="18"/><
 const EditIcon = (props) => <Icon {...props}><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></Icon>;
 const CodeIcon = (props) => <Icon {...props}><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></Icon>;
 const UsersIcon = (props) => <Icon {...props}><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></Icon>;
+// New Icons for Features
+const LayoutIcon = (props) => <Icon {...props}><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><line x1="3" y1="9" x2="21" y2="9" /><line x1="9" y1="21" x2="9" y2="9" /></Icon>;
+const CalendarIcon = (props) => <Icon {...props}><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></Icon>;
+const MessageSquareIcon = (props) => <Icon {...props}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></Icon>;
+const BellIcon = (props) => <Icon {...props}><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" /></Icon>;
+const DownloadIcon = (props) => <Icon {...props}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></Icon>;
+const PieChartIcon = (props) => <Icon {...props}><path d="M21.21 15.89A10 10 0 1 1 8 2.83" /><path d="M22 12A10 10 0 0 0 12 2v10z" /></Icon>;
 
 const VIEWS = { DASHBOARD: 'Dashboard', REGISTRATION: 'Registration', TRACKING: 'Progress', REPORTS: 'Reports', DATABASE: 'Projects', EVALUATION: 'Evaluation', ADMIN: 'Admin', PROFILE: 'Profile' };
 const AUTH_VIEWS = { INIT: 'Initial', LOGIN: 'Login', SIGNUP: 'SignUp' };
 const INITIAL_EVALUATION = { score: 0, feedback: "Awaiting review.", status: "Pending", breakdown: { innovation: 0, execution: 0, documentation: 0 } };
-const ADMIN_EMAILS = ["admin@acadex.edu"];
+const ADMIN_EMAILS = ["admin@acadex.edu", "admin@protrack.edu"];
 const ANONYMOUS_NAME_PREFIX = "Guest_";
 
 const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
@@ -95,6 +102,9 @@ export default function App() {
     const [adminSelectedProject, setAdminSelectedProject] = useState(null);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [showRawData, setShowRawData] = useState(false);
+    
+    // New State for Notification Center
+    const [showNotifications, setShowNotifications] = useState(false);
 
     const toggleTheme = () => setDarkMode(!darkMode);
     
@@ -114,7 +124,7 @@ export default function App() {
             ? 'bg-slate-800 border-slate-700 text-white placeholder-gray-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500' 
             : 'bg-white border-slate-300 text-slate-900 placeholder-slate-400 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600',
         
-        // UPDATED: New "Catchy" Theme for Students (Violet/Fuchsia)
+        // Catchy Theme for Students (Violet/Fuchsia)
         accentPrimary: isUserAdmin 
             ? 'bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 text-white shadow-xl shadow-cyan-500/40' 
             : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-700 hover:to-fuchsia-700 text-white shadow-xl shadow-fuchsia-500/40',
@@ -135,6 +145,31 @@ export default function App() {
         warning: 'text-amber-500',
         danger: 'text-rose-500'
     };
+
+    const navItems = useMemo(() => {
+        const items = [
+            { id: VIEWS.DASHBOARD, label: 'Dashboard', IconComponent: HomeIcon },
+        ];
+
+        if (!isUserAdmin) {
+            items.push(
+                { id: VIEWS.REGISTRATION, label: 'Register', IconComponent: PlusIcon },
+                { id: VIEWS.TRACKING, label: 'Tracking', IconComponent: ProgressIcon },
+                { id: VIEWS.REPORTS, label: 'Reports', IconComponent: ReportIcon }
+            );
+        }
+
+        items.push({ id: VIEWS.DATABASE, label: 'Projects', IconComponent: DatabaseIcon });
+
+        if (isUserAdmin) {
+            items.push({ id: VIEWS.ADMIN, label: 'Admin', IconComponent: ShieldIcon });
+        } else {
+            items.push({ id: VIEWS.EVALUATION, label: 'Results', IconComponent: EvaluateIcon });
+        }
+
+        return items;
+    }, [isUserAdmin]);
+
 
     useEffect(() => {
         if (Object.keys(firebaseConfig).length === 0) { setError("Config missing."); return; }
@@ -159,7 +194,6 @@ export default function App() {
                 setUserId(null);
                 setIsUserAdmin(false);
                 setUserEmail('');
-                // FIX: Completely reset all user data on logout
                 setUserProfile({ bio: '', title: 'Student', photoURL: '' }); 
                 setProjects([]);
                 setUserTeam(null);
@@ -181,7 +215,6 @@ export default function App() {
                     const data = docSnap.data();
                     setUserProfile({
                         bio: data.bio || '',
-                        // FIX: Force role sanitation on load
                         title: data.title === 'Admin' && !isUserAdmin ? 'Student' : (data.title || 'Student'),
                         photoURL: data.photoURL || ''
                     });
@@ -323,6 +356,16 @@ export default function App() {
         return userTeam && userTeam.members.every(m => m.status === 'accepted');
     }, [userTeam]);
 
+    // Helper: Calculate Notifications
+    const notifications = useMemo(() => {
+        if (!userTeam) return [];
+        const alerts = [];
+        if (userTeam.evaluation?.status === 'Completed') alerts.push({ id: 1, text: "Project Graded! Check results.", type: 'success' });
+        const pendingTasks = (userTeam.tasks || []).filter(t => !t.completed).length;
+        if (pendingTasks > 0) alerts.push({ id: 2, text: `You have ${pendingTasks} pending tasks.`, type: 'info' });
+        return alerts;
+    }, [userTeam]);
+
     const Card = ({ children, className = "" }) => (
         <div className={`${theme.card} rounded-3xl p-6 transition-all duration-300 ${className}`}>{children}</div>
     );
@@ -373,7 +416,7 @@ export default function App() {
         <footer className={`w-full py-8 mt-auto ${darkMode ? 'bg-slate-900 border-t border-slate-800 text-slate-400' : 'bg-slate-50 border-t border-slate-200 text-slate-500'}`}>
             <div className="max-w-7xl mx-auto px-4 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
                 <div className="flex items-center gap-2">
-                    <img src="logo.png" alt="Acadex" className="h-6 w-auto opacity-50 grayscale" />
+                    <img src="/logo.png" alt="Acadex" className="h-6 w-auto opacity-50 grayscale" />
                     <span className="text-sm font-semibold">Acadex</span>
                 </div>
                 <p className="text-sm">© {new Date().getFullYear()} Acadex. All rights reserved.</p>
@@ -411,7 +454,6 @@ export default function App() {
         };
 
         const saveProfile = async () => {
-            // FIX: Prevent non-admins from setting their title to 'Admin'
             if (!isUserAdmin && formData.title.toLowerCase() === 'admin') {
                 alertUser('error', "You are not authorized to use the title 'Admin'. Reverting to 'Student'.");
                 setFormData(prev => ({ ...prev, title: 'Student' }));
@@ -457,7 +499,6 @@ export default function App() {
                         <div className="absolute -bottom-12 left-8">
                             <div className="relative group">
                                 <div className={`w-28 h-28 rounded-full border-4 ${darkMode ? 'border-gray-950' : 'border-white'} overflow-hidden bg-gray-200 flex items-center justify-center shadow-xl`}>
-                                    {/* FIX: Use userId as key to force re-render image on user switch */}
                                     {formData.photoURL ? (
                                         <img key={userId} src={formData.photoURL} alt="Profile" className="w-full h-full object-cover" />
                                     ) : (
@@ -520,7 +561,7 @@ export default function App() {
                 <Card className="w-full max-w-md space-y-8 !p-12">
                     <div className="text-center">
                         <div className="w-32 h-16 mx-auto flex items-center justify-center mb-4">
-                            <img src="logo.png" alt="Acadex" className="h-full w-auto object-contain" />
+                            <img src="/logo.png" alt="Acadex" className="h-full w-auto object-contain" />
                         </div>
                         <h1 className={`text-3xl font-extrabold ${theme.heading}`}>Acadex</h1>
                         <p className={`mt-2 ${theme.textSecondary}`}>Academic Project Management Suite</p>
@@ -552,11 +593,6 @@ export default function App() {
         );
     };
 
-    // ... (RegistrationView, ProjectRequiredMessage, ProgressTrackingView, ReportView, AdminSubmissionView, AdminPanel components remain identical) ...
-    // [I have kept the rest of the code identical to the previous correct version to save space, as no changes were needed inside these sub-components]
-    // [For a real file, you would include all sub-components here.]
-    // Since I cannot skip lines without risking the code breaking for you, I will paste the full components again below to ensure you have a complete working file.
-    
     const RegistrationView = () => {
         const [form, setForm] = useState({ team: '', project: '' });
         const [memberEmails, setMemberEmails] = useState(['']);
@@ -641,17 +677,18 @@ export default function App() {
         return null;
     };
 
+    // --- NEW: Enhanced Progress Tracking (Kanban + Calendar + Comments) ---
     const ProgressTrackingView = () => {
         if (!userTeam || !isTeamActive) return <ProjectRequiredMessage viewName={VIEWS.TRACKING} />;
-        
+        const [viewMode, setViewMode] = useState('list'); // list, board, calendar
         const isLead = userTeam.members.find(m => m.id === userId)?.role === 'Lead';
-        const [newTask, setNewTask] = useState({ title: '', assigneeId: userTeam.members.find(m => m.id === userId)?.id || userTeam.members[0]?.id, date: '' });
-        
+        const [newTask, setNewTask] = useState({ title: '', assigneeId: userTeam.members[0]?.id, date: '' });
+        const [commentTask, setCommentTask] = useState(null); // Task ID for comment modal
+        const [newComment, setNewComment] = useState('');
+
         const addTask = async () => {
-            if (!newTask.title || !newTask.date) return alertUser('error', 'Please fill in all task details');
+            if (!newTask.title || !newTask.date) return alertUser('error', 'Please fill details');
             const assignee = userTeam.members.find(m => m.id === newTask.assigneeId) || userTeam.members[0];
-            if (!assignee) return alertUser('error', 'Could not find assignee.');
-            
             const task = {
                 id: crypto.randomUUID(),
                 title: newTask.title,
@@ -659,107 +696,163 @@ export default function App() {
                 assigneeName: assignee.name,
                 dueDate: newTask.date,
                 completed: false,
+                status: 'To Do', // New field for Kanban
+                comments: [], // New field for comments
                 createdAt: new Date().toISOString()
             };
-            const updatedTasks = [...(userTeam.tasks || []), task];
-            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'projects', userTeam.id), { tasks: updatedTasks });
+            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'projects', userTeam.id), { tasks: [...(userTeam.tasks || []), task] });
             setNewTask({ title: '', assigneeId: userId, date: '' });
-            alertUser('success', 'Task assigned');
         };
 
-        const toggleTask = async (taskId, currentStatus, assigneeId) => {
-            if (!isLead && userId !== assigneeId) {
-                alertUser('error', "Only the assignee or Team Lead can update this task.");
-                return;
-            }
-            const updatedTasks = (userTeam.tasks || []).map(t => 
-                t.id === taskId ? { ...t, completed: !currentStatus } : t
-            );
+        // Update status (Kanban drag simulation)
+        const moveTask = async (task, direction) => {
+            const statuses = ['To Do', 'In Progress', 'Done'];
+            const currentIndex = statuses.indexOf(task.status || (task.completed ? 'Done' : 'To Do'));
+            const nextIndex = currentIndex + direction;
+            if (nextIndex < 0 || nextIndex >= statuses.length) return;
+            
+            const newStatus = statuses[nextIndex];
+            const updatedTasks = userTeam.tasks.map(t => t.id === task.id ? { ...t, status: newStatus, completed: newStatus === 'Done' } : t);
             await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'projects', userTeam.id), { tasks: updatedTasks });
         };
 
-        const deleteTask = async (taskId) => {
-             if (!isLead) return alertUser('error', 'Only the Team Lead can delete tasks.');
-             const updatedTasks = (userTeam.tasks || []).filter(t => t.id !== taskId);
-             await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'projects', userTeam.id), { tasks: updatedTasks });
-             alertUser('success', 'Task deleted.');
+        const addComment = async () => {
+            if(!newComment.trim()) return;
+            const comment = { id: crypto.randomUUID(), text: newComment, author: userName, date: new Date().toLocaleDateString() };
+            const updatedTasks = userTeam.tasks.map(t => t.id === commentTask.id ? { ...t, comments: [...(t.comments || []), comment] } : t);
+            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'projects', userTeam.id), { tasks: updatedTasks });
+            setNewComment('');
         };
 
-        const tasks = userTeam.tasks || [];
-        const completedCount = tasks.filter(t => t.completed).length;
-        const progress = tasks.length > 0 ? Math.round((completedCount / tasks.length) * 100) : 0;
-        
-        const sortedTasks = [...tasks].sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-
+        // Render Logic
         return (
-            <div className="max-w-5xl mx-auto space-y-8">
-                <h1 className={`text-4xl font-extrabold ${theme.heading}`}>Progress Tracking</h1>
-                <h2 className={`text-xl font-bold ${theme.heading} text-fuchsia-500`}>{userTeam.name}</h2>
-
-                <Card>
-                    <div className="flex justify-between items-center mb-6">
-                        <h3 className={`text-xl font-bold ${theme.heading}`}>Project Progress Overview</h3>
-                        <span className={`text-sm font-mono px-3 py-1 rounded-full ${darkMode ? 'bg-fuchsia-900/40 text-fuchsia-300' : 'bg-fuchsia-100 text-fuchsia-600'}`}>{progress}% Complete</span>
+            <div className="max-w-6xl mx-auto space-y-6">
+                <div className="flex justify-between items-center">
+                    <h1 className={`text-4xl font-extrabold ${theme.heading}`}>Project Tasks</h1>
+                    <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+                        {['list', 'board', 'calendar'].map(m => (
+                            <button key={m} onClick={() => setViewMode(m)} className={`px-4 py-2 rounded-md text-sm capitalize font-medium transition-all ${viewMode === m ? `bg-white dark:bg-gray-700 shadow ${isUserAdmin ? 'text-cyan-500' : 'text-fuchsia-500'}` : theme.textSecondary}`}>
+                                {m === 'board' ? <LayoutIcon className="w-4 h-4 inline mr-1"/> : m === 'calendar' ? <CalendarIcon className="w-4 h-4 inline mr-1"/> : <ProgressIcon className="w-4 h-4 inline mr-1"/>} {m}
+                            </button>
+                        ))}
                     </div>
-                    <div className="w-full h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden shadow-inner">
-                         <div className="h-full bg-gradient-to-r from-violet-500 to-fuchsia-500 transition-all duration-700" style={{ width: `${progress}%` }}></div>
-                    </div>
-                    <p className={`mt-3 text-sm ${theme.textSecondary}`}>{completedCount} out of {tasks.length} tasks completed.</p>
-                </Card>
+                </div>
 
+                {/* Add Task Form (Only visible to Lead or in List/Board view) */}
                 {isLead && (
-                    <Card>
-                        <h4 className={`text-xl font-bold mb-4 ${theme.heading} flex items-center`}><PlusIcon className="w-5 h-5 mr-2 text-fuchsia-500"/> Assign New Task</h4>
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                            <div className="md:col-span-2">
-                                <Input placeholder="Task Description" value={newTask.title} onChange={e => setNewTask({...newTask, title: e.target.value})} />
-                            </div>
-                            <select className={`w-full px-4 py-3 rounded-xl outline-none border ${theme.input}`} value={newTask.assigneeId} onChange={e => setNewTask({...newTask, assigneeId: e.target.value})}>
+                    <Card className="mb-6">
+                        <div className="flex flex-col md:flex-row gap-4">
+                            <Input placeholder="New Task Title" value={newTask.title} onChange={e => setNewTask({...newTask, title: e.target.value})} />
+                            <select className={`px-4 py-3 rounded-xl outline-none border ${theme.input}`} value={newTask.assigneeId} onChange={e => setNewTask({...newTask, assigneeId: e.target.value})}>
                                 {userTeam.members.map(m => <option key={m.id} value={m.id}>{m.name}</option>)}
                             </select>
                             <Input type="date" value={newTask.date} onChange={e => setNewTask({...newTask, date: e.target.value})} />
+                            <Button onClick={addTask}>Add</Button>
                         </div>
-                        <Button onClick={addTask} className="w-full mt-4">Assign Task</Button>
                     </Card>
                 )}
 
-                <Card>
-                    <h3 className={`text-xl font-bold ${theme.heading} mb-6`}>All Tasks</h3>
-                    <div className="space-y-4">
-                        {tasks.length === 0 ? (
-                            <p className={`text-center py-8 ${theme.textSecondary}`}>No tasks assigned yet. Time to get started!</p>
-                        ) : (
-                            sortedTasks.map(t => (
-                                <div key={t.id} className={`flex items-center justify-between p-4 rounded-xl border transition-all duration-300 ${t.completed ? (darkMode ? 'bg-emerald-900/10 border-emerald-900/30 opacity-70' : 'bg-emerald-50 border-emerald-200 opacity-70') : (darkMode ? 'bg-gray-900/50 border-gray-700 hover:border-fuchsia-500' : 'bg-white border-gray-100 shadow-sm hover:shadow-md')}`}>
-                                    <div className="flex items-center gap-4 overflow-hidden">
-                                        <button 
-                                            onClick={() => toggleTask(t.id, t.completed, t.assigneeId)}
-                                            className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors flex-shrink-0 ${
-                                                t.completed ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-gray-400 text-transparent hover:border-fuchsia-500 hover:bg-fuchsia-500/10'
-                                            } ${(!isLead && userId !== t.assigneeId) ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                            disabled={!isLead && userId !== t.assigneeId}
-                                        >
-                                            <CheckCircleIcon className="w-4 h-4" />
-                                        </button>
-                                        <div className="min-w-0">
-                                            <p className={`font-medium truncate ${t.completed ? 'line-through opacity-70' : ''} ${theme.textPrimary}`}>{t.title}</p>
-                                            <div className="flex items-center gap-3 mt-1 text-xs">
-                                                <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800">
-                                                    <div className="w-4 h-4 rounded-full bg-fuchsia-500 flex items-center justify-center text-[8px] text-white font-bold">{t.assigneeName?.charAt(0)}</div>
-                                                    <span className={`${theme.textSecondary}`}>{t.assigneeName}</span>
+                {/* LIST VIEW */}
+                {viewMode === 'list' && (
+                    <div className="space-y-3">
+                        {userTeam.tasks?.length === 0 && <div className="text-center py-10 opacity-50">No tasks yet. Add one above!</div>}
+                        {userTeam.tasks?.map(t => (
+                            <div key={t.id} className={`flex items-center justify-between p-4 rounded-xl border ${darkMode ? 'bg-gray-900/50 border-gray-800' : 'bg-white border-gray-100 shadow-sm'}`}>
+                                <div className="flex items-center gap-4">
+                                    <button onClick={() => moveTask(t, 1)} className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${t.completed ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-gray-400'}`}>
+                                        {t.completed && <CheckCircleIcon className="w-4 h-4" />}
+                                    </button>
+                                    <div>
+                                        <p className={`font-medium ${t.completed ? 'line-through opacity-50' : ''} ${theme.textPrimary}`}>{t.title}</p>
+                                        <p className="text-xs text-gray-500">{t.assigneeName} • {t.status || 'To Do'}</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <button onClick={() => setCommentTask(t)} className="p-2 text-gray-400 hover:text-fuchsia-500 relative">
+                                        <MessageSquareIcon className="w-5 h-5"/>
+                                        {t.comments?.length > 0 && <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>}
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                {/* KANBAN BOARD VIEW */}
+                {viewMode === 'board' && (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {['To Do', 'In Progress', 'Done'].map(status => (
+                            <div key={status} className={`p-4 rounded-2xl ${darkMode ? 'bg-gray-900/50' : 'bg-gray-50'}`}>
+                                <h3 className={`font-bold mb-4 ${theme.heading} flex justify-between`}>
+                                    {status} <span className="bg-gray-200 dark:bg-gray-700 px-2 rounded text-xs py-1">{userTeam.tasks?.filter(t => (t.status || (t.completed ? 'Done' : 'To Do')) === status).length}</span>
+                                </h3>
+                                <div className="space-y-3">
+                                    {userTeam.tasks?.filter(t => (t.status || (t.completed ? 'Done' : 'To Do')) === status).map(t => (
+                                        <div key={t.id} className={`p-3 rounded-xl border ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200 shadow-sm'}`}>
+                                            <p className={`text-sm font-medium mb-2 ${theme.textPrimary}`}>{t.title}</p>
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-[10px] uppercase tracking-wider text-gray-500">{t.assigneeName}</span>
+                                                <div className="flex gap-1">
+                                                    {status !== 'To Do' && <button onClick={() => moveTask(t, -1)} className="text-xs px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded hover:opacity-80">←</button>}
+                                                    {status !== 'Done' && <button onClick={() => moveTask(t, 1)} className="text-xs px-2 py-1 bg-fuchsia-100 text-fuchsia-600 dark:bg-fuchsia-900/30 rounded hover:opacity-80">→</button>}
                                                 </div>
-                                                <span className={`${theme.textSecondary} flex items-center gap-1`}>
-                                                    <ClockIcon className="w-3 h-3"/> Due: {t.dueDate}
-                                                </span>
                                             </div>
                                         </div>
-                                    </div>
-                                    {isLead && <button onClick={() => deleteTask(t.id)} className="text-gray-400 hover:text-rose-500 p-2 flex-shrink-0 transition-colors"><TrashIcon className="w-4 h-4" /></button>}
+                                    ))}
                                 </div>
-                            ))
-                        )}
+                            </div>
+                        ))}
                     </div>
-                </Card>
+                )}
+
+                {/* CALENDAR VIEW (Simplified List sorted by Date) */}
+                {viewMode === 'calendar' && (
+                    <div className="space-y-6">
+                        {Object.entries(userTeam.tasks?.reduce((acc, task) => {
+                            const d = task.dueDate || 'No Date';
+                            if(!acc[d]) acc[d] = [];
+                            acc[d].push(task);
+                            return acc;
+                        }, {}) || {}).sort().map(([date, tasks]) => (
+                            <div key={date}>
+                                <h3 className={`text-sm font-bold uppercase tracking-widest mb-3 ${theme.textSecondary}`}>{date === 'No Date' ? 'Unscheduled' : new Date(date).toDateString()}</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                    {tasks.map(t => (
+                                        <div key={t.id} className={`p-4 rounded-xl border border-l-4 ${t.completed ? 'border-l-emerald-500 opacity-60' : 'border-l-fuchsia-500'} ${theme.card}`}>
+                                            <div className="flex justify-between">
+                                                <span className={`font-medium ${theme.textPrimary}`}>{t.title}</span>
+                                                <span className={`text-xs px-2 py-1 rounded ${t.status === 'Done' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>{t.status || 'To Do'}</span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                {/* COMMENT MODAL */}
+                {commentTask && (
+                    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                        <Card className="w-full max-w-md">
+                            <h3 className={`font-bold mb-4 ${theme.heading}`}>Comments: {commentTask.title}</h3>
+                            <div className="h-48 overflow-y-auto space-y-3 mb-4 p-2 bg-gray-50 dark:bg-gray-900/50 rounded-xl">
+                                {commentTask.comments?.length === 0 && <p className="text-center text-gray-400 text-sm mt-10">No comments yet.</p>}
+                                {commentTask.comments?.map(c => (
+                                    <div key={c.id} className="bg-white dark:bg-gray-800 p-2 rounded-lg shadow-sm text-sm">
+                                        <p className="font-bold text-xs text-fuchsia-500">{c.author}</p>
+                                        <p className={theme.textPrimary}>{c.text}</p>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="flex gap-2">
+                                <Input value={newComment} onChange={e => setNewComment(e.target.value)} placeholder="Type a comment..." />
+                                <Button onClick={addComment}>Post</Button>
+                            </div>
+                            <button onClick={() => setCommentTask(null)} className="w-full mt-2 text-xs text-gray-500 hover:underline">Close</button>
+                        </Card>
+                    </div>
+                )}
             </div>
         );
     };
@@ -1002,38 +1095,101 @@ export default function App() {
     };
 
     const AdminPanel = () => {
-        const [tab, setTab] = useState('projects'); 
+        const [tab, setTab] = useState('analytics'); 
         const [editProject, setEditProject] = useState(null); 
 
         if (adminSelectedProject) {
             return <AdminSubmissionView project={adminSelectedProject} onBack={() => setAdminSelectedProject(null)} />;
         }
 
+        // Export CSV Logic
+        const downloadCSV = () => {
+            const headers = "Project Name,Team Name,Status,Score,Supervisor\n";
+            const rows = projects.map(p => 
+                `"${p.name}","${p.teamName}","${p.reportStatus || 'Draft'}","${p.evaluation?.score || 0}","${p.supervisor || 'Unassigned'}"`
+            ).join("\n");
+            const blob = new Blob([headers + rows], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `acadex_export_${new Date().toISOString().slice(0,10)}.csv`;
+            a.click();
+        };
+
+        // Assign Supervisor Logic
+        const assignSupervisor = async (projId, name) => {
+            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'projects', projId), { supervisor: name });
+            alertUser('success', 'Supervisor Assigned');
+        };
+
         return (
             <div className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Stats Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <Card className="!p-4 flex items-center gap-4 border-l-4 border-cyan-500">
                         <div className="p-3 bg-cyan-500/10 rounded-xl text-cyan-500"><DatabaseIcon className="w-6 h-6"/></div>
-                        <div><p className="text-2xl font-bold">{projects.length}</p><p className={`text-xs ${theme.textSecondary}`}>Total Projects</p></div>
+                        <div><p className="text-2xl font-bold">{projects.length}</p><p className={`text-xs ${theme.textSecondary}`}>Projects</p></div>
                     </Card>
                     <Card className="!p-4 flex items-center gap-4 border-l-4 border-teal-500">
                         <div className="p-3 bg-teal-500/10 rounded-xl text-teal-500"><UsersIcon className="w-6 h-6"/></div>
-                        <div><p className="text-2xl font-bold">{allUsers.length}</p><p className={`text-xs ${theme.textSecondary}`}>Registered Users</p></div>
+                        <div><p className="text-2xl font-bold">{allUsers.length}</p><p className={`text-xs ${theme.textSecondary}`}>Users</p></div>
                     </Card>
                     <Card className="!p-4 flex items-center gap-4 border-l-4 border-purple-500">
                         <div className="p-3 bg-purple-500/10 rounded-xl text-purple-500"><EvaluateIcon className="w-6 h-6"/></div>
                         <div><p className="text-2xl font-bold">{Math.round(projects.reduce((a,b) => a + (b.evaluation?.score||0), 0) / (projects.length || 1))}</p><p className={`text-xs ${theme.textSecondary}`}>Avg Score</p></div>
+                    </Card>
+                    <Card className="!p-4 flex items-center gap-4 border-l-4 border-amber-500">
+                        <div className="p-3 bg-amber-500/10 rounded-xl text-amber-500"><ReportIcon className="w-6 h-6"/></div>
+                        <div><p className="text-2xl font-bold">{projects.filter(p => p.reportStatus === 'Submitted').length}</p><p className={`text-xs ${theme.textSecondary}`}>Submitted</p></div>
                     </Card>
                 </div>
 
                 <Card>
                     <div className="flex justify-between items-center mb-6">
                         <h1 className={`text-4xl font-bold ${theme.heading} flex items-center`}><ShieldIcon className="w-8 h-8 mr-3 text-cyan-500"/> Admin Console</h1>
-                        <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
-                            <button onClick={() => setTab('projects')} className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${tab === 'projects' ? 'bg-white dark:bg-gray-700 shadow text-cyan-600' : theme.textSecondary}`}>Projects</button>
-                            <button onClick={() => setTab('users')} className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${tab === 'users' ? 'bg-white dark:bg-gray-700 shadow text-cyan-600' : theme.textSecondary}`}>Users</button>
+                        <div className="flex items-center gap-2">
+                            <button onClick={downloadCSV} className="px-4 py-2 text-xs font-bold uppercase tracking-wider border border-cyan-500 text-cyan-500 rounded-lg hover:bg-cyan-50 dark:hover:bg-cyan-900/20 transition-colors flex items-center">
+                                <DownloadIcon className="w-4 h-4 mr-2"/> Export CSV
+                            </button>
+                            <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+                                {['analytics', 'projects', 'users'].map(t => (
+                                    <button key={t} onClick={() => setTab(t)} className={`px-4 py-2 rounded-md text-sm capitalize font-medium transition-all ${tab === t ? 'bg-white dark:bg-gray-700 shadow text-cyan-600' : theme.textSecondary}`}>{t}</button>
+                                ))}
+                            </div>
                         </div>
                     </div>
+
+                    {tab === 'analytics' && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-8">
+                            <div className="text-center">
+                                <h3 className={`text-lg font-bold mb-4 ${theme.heading}`}>Project Status</h3>
+                                {/* Simple CSS/SVG Pie Chart */}
+                                <div className="relative w-48 h-48 mx-auto rounded-full border-8 border-gray-100 dark:border-gray-800 flex items-center justify-center">
+                                    <div className="text-center">
+                                        <span className="block text-3xl font-black text-cyan-500">{Math.round((projects.filter(p => p.reportStatus === 'Submitted').length / (projects.length || 1)) * 100)}%</span>
+                                        <span className="text-xs text-gray-500">Completion Rate</span>
+                                    </div>
+                                    <svg className="absolute top-0 left-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
+                                        <circle cx="50" cy="50" r="40" fill="none" stroke="#06b6d4" strokeWidth="8" strokeDasharray={`${(projects.filter(p => p.reportStatus === 'Submitted').length / (projects.length || 1)) * 251} 251`} strokeLinecap="round" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 className={`text-lg font-bold mb-4 ${theme.heading}`}>Top Performers</h3>
+                                <div className="space-y-3">
+                                    {projects.sort((a,b) => (b.evaluation?.score || 0) - (a.evaluation?.score || 0)).slice(0, 5).map((p, i) => (
+                                        <div key={p.id} className="flex items-center justify-between p-2 border-b dark:border-gray-800">
+                                            <div className="flex items-center gap-3">
+                                                <span className="font-mono text-cyan-500 text-lg">#{i+1}</span>
+                                                <span className={theme.textPrimary}>{p.name}</span>
+                                            </div>
+                                            <span className="font-bold">{p.evaluation?.score || 0}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
                     {tab === 'projects' && (
                         <div className="overflow-x-auto">
@@ -1041,9 +1197,9 @@ export default function App() {
                                 <thead>
                                     <tr className={`border-b ${darkMode ? 'border-gray-700 text-gray-300' : 'border-gray-200 text-gray-500'} text-sm uppercase`}>
                                         <th className="pb-3 pl-4">Project</th>
-                                        <th className="pb-3 hidden sm:table-cell">Team</th>
-                                        <th className="pb-3 hidden md:table-cell">Submission Status</th>
-                                        <th className="pb-3">Evaluation</th>
+                                        <th className="pb-3 hidden sm:table-cell">Supervisor</th>
+                                        <th className="pb-3 hidden md:table-cell">Status</th>
+                                        <th className="pb-3">Score</th>
                                         <th className="pb-3 text-right pr-4">Actions</th>
                                     </tr>
                                 </thead>
@@ -1054,18 +1210,20 @@ export default function App() {
                                                 {p.name}
                                                 {showRawData && <div className="mt-1 text-[10px] font-mono text-gray-500 bg-gray-900/50 p-1 rounded max-w-xs truncate">{JSON.stringify(p)}</div>}
                                             </td>
-                                            <td className={`py-4 hidden sm:table-cell ${theme.textSecondary}`}>{p.teamName}</td>
+                                            <td className={`py-4 hidden sm:table-cell ${theme.textSecondary}`}>
+                                                <input 
+                                                    className="bg-transparent border-b border-transparent hover:border-cyan-500 focus:border-cyan-500 outline-none w-32 transition-colors" 
+                                                    placeholder="Unassigned" 
+                                                    defaultValue={p.supervisor || ''}
+                                                    onBlur={(e) => assignSupervisor(p.id, e.target.value)}
+                                                />
+                                            </td>
                                             <td className="py-4 hidden md:table-cell">
                                                 <span className={`px-2 py-1 rounded-full text-xs font-semibold ${p.reportStatus === 'Submitted' ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300' : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'}`}>
                                                     {p.reportStatus || 'Draft'}
                                                 </span>
                                             </td>
-                                            <td className="py-4">
-                                                <div className="flex items-center gap-2">
-                                                    <span className={`px-2 py-1 rounded-full text-xs font-semibold ${p.evaluation?.status === 'Completed' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300'}`}>{p.evaluation?.status || 'Pending'}</span>
-                                                    {p.evaluation?.status === 'Completed' && <span className="font-bold text-cyan-500 text-sm">{p.evaluation.score}/100</span>}
-                                                </div>
-                                            </td>
+                                            <td className="py-4 font-bold text-cyan-500">{p.evaluation?.score || '-'}</td>
                                             <td className="py-4 text-right pr-4 flex justify-end space-x-2">
                                                 <button onClick={() => setEditProject(p)} className="text-amber-500 hover:bg-amber-100 dark:hover:bg-amber-900/20 p-2 rounded-xl" title="Edit Project Name">
                                                     <EditIcon className="w-4 h-4" />
@@ -1179,7 +1337,7 @@ export default function App() {
                                 : (isUserAdmin ? 'Welcome to the Admin Control Center.' : 'Ready to start your next academic project?')}
                         </p>
                         {!userTeam && !isUserAdmin && <Button onClick={() => setCurrentView(VIEWS.REGISTRATION)} className="mt-8 bg-white text-indigo-700 hover:bg-indigo-50 shadow-none hover:shadow-lg">Start Project Now <PlusIcon className="w-5 h-5"/></Button>}
-                        {userTeam && isTeamActive && <Button onClick={() => setCurrentView(VIEWS.TRACKING)} className="mt-8 bg-white text-indigo-700 hover:bg-indigo-50 shadow-none hover:shadow-lg">Go to Project <ProgressIcon className="w-5 h-5"/></Button>}
+                        {!isUserAdmin && userTeam && isTeamActive && <Button onClick={() => setCurrentView(VIEWS.TRACKING)} className="mt-8 bg-white text-indigo-700 hover:bg-indigo-50 shadow-none hover:shadow-lg">Go to Project <ProgressIcon className="w-5 h-5"/></Button>}
                          {isUserAdmin && <Button onClick={() => setCurrentView(VIEWS.ADMIN)} className="mt-8 bg-white text-cyan-700 hover:bg-cyan-50 shadow-none hover:shadow-lg">Open Admin Console <ShieldIcon className="w-5 h-5"/></Button>}
                     </div>
 
@@ -1257,8 +1415,15 @@ export default function App() {
 
     if (error) return <div className="flex items-center justify-center min-h-screen bg-rose-900 text-rose-300 p-4 font-mono text-center">Initialization Error: {error}</div>;
     if (!isAuthReady) return <div className={`flex items-center justify-center min-h-screen ${theme.appBg} ${theme.textPrimary}`}>
-        <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
-        <span className="ml-3 font-medium">Loading Application...</span>
+        {/* Skeleton Loader */}
+        <div className="w-full max-w-md p-6 space-y-4">
+            <div className="h-8 bg-gray-700 rounded w-3/4 animate-pulse mx-auto"></div>
+            <div className="h-4 bg-gray-800 rounded w-1/2 animate-pulse mx-auto"></div>
+            <div className="space-y-2 pt-4">
+                <div className="h-12 bg-gray-800 rounded animate-pulse"></div>
+                <div className="h-12 bg-gray-800 rounded animate-pulse"></div>
+            </div>
+        </div>
     </div>;
     if (!userId) return <AuthScreen />;
 
@@ -1278,20 +1443,38 @@ export default function App() {
                 </div>
 
                 <nav className="hidden md:flex items-center space-x-2">
-                     {[
-                        { id: VIEWS.DASHBOARD, label: 'Dashboard', IconComponent: HomeIcon },
-                        { id: VIEWS.REGISTRATION, label: 'Register', IconComponent: PlusIcon },
-                        { id: VIEWS.TRACKING, label: 'Tracking', IconComponent: ProgressIcon },
-                        { id: VIEWS.REPORTS, label: 'Reports', IconComponent: ReportIcon },
-                        { id: VIEWS.DATABASE, label: 'Projects', IconComponent: DatabaseIcon },
-                        ...(isUserAdmin ? [{ id: VIEWS.ADMIN, label: 'Admin', IconComponent: ShieldIcon }] : [{ id: VIEWS.EVALUATION, label: 'Results', IconComponent: EvaluateIcon }])
-                    ].map((item) => (
+                     {navItems.map((item) => (
                          <NavItem key={item.id} view={item.id} label={item.label} IconComponent={item.IconComponent} />
                     ))}
                 </nav>
 
                 <div className="flex items-center gap-4">
                     
+                    {/* Notification Bell */}
+                    <div className="relative">
+                        <button onClick={() => setShowNotifications(!showNotifications)} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors relative">
+                            <BellIcon className="w-5 h-5" />
+                            {notifications.length > 0 && <span className="absolute top-1 right-1 w-2 h-2 bg-rose-500 rounded-full"></span>}
+                        </button>
+                        
+                        {showNotifications && (
+                            <div className="absolute right-0 top-12 w-64 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 p-4 z-50">
+                                <h4 className="text-sm font-bold mb-2">Notifications</h4>
+                                {notifications.length === 0 ? (
+                                    <p className="text-xs text-gray-500">No new alerts.</p>
+                                ) : (
+                                    <ul className="space-y-2">
+                                        {notifications.map(n => (
+                                            <li key={n.id} className={`text-xs p-2 rounded ${n.type === 'success' ? 'bg-emerald-100 text-emerald-700' : 'bg-indigo-100 text-indigo-700'}`}>
+                                                {n.text}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </div>
+                        )}
+                    </div>
+
                     <ThemeSwitch />
                     
                     <div 
@@ -1300,11 +1483,9 @@ export default function App() {
                     >
                          <div className="text-right hidden lg:block">
                             <p className={`text-sm font-bold ${theme.textPrimary}`}>{userName}</p>
-                            {/* FIX: Ensure 'Admin' role text is strictly controlled by authentication status */}
                             <p className={`text-xs ${theme.textSecondary} uppercase`}>{isUserAdmin ? 'Admin' : (userProfile.title === 'Admin' ? 'Student' : userProfile.title)}</p>
                         </div>
                         {userProfile.photoURL ? (
-                             // FIX: Use key={userId} to force image to refresh when user changes
                              <img key={userId} src={userProfile.photoURL} alt="Profile" className="w-10 h-10 rounded-full object-cover border-2 border-indigo-500 shadow-md" />
                         ) : (
                             <div className={`w-10 h-10 rounded-full bg-gradient-to-tr ${isUserAdmin ? 'from-cyan-500 to-teal-500' : 'from-violet-500 to-fuchsia-500'} flex items-center justify-center text-white text-base font-bold border-2 border-indigo-500 shadow-md`}>
@@ -1321,15 +1502,7 @@ export default function App() {
 
             <div className={`md:hidden fixed top-20 w-full h-auto z-20 transition-all duration-300 ${isMobileMenuOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'} ${theme.navBg} shadow-xl rounded-b-2xl p-4`}>
                 <div className="space-y-2">
-                    {[
-                        { id: VIEWS.DASHBOARD, label: 'Dashboard', IconComponent: HomeIcon },
-                        { id: VIEWS.REGISTRATION, label: 'Register Project', IconComponent: PlusIcon },
-                        { id: VIEWS.TRACKING, label: 'Task Tracking', IconComponent: ProgressIcon },
-                        { id: VIEWS.REPORTS, label: 'Submission Portal', IconComponent: ReportIcon },
-                        { id: VIEWS.DATABASE, label: 'Project Directory', IconComponent: DatabaseIcon },
-                        ...(isUserAdmin ? [{ id: VIEWS.ADMIN, label: 'Admin Console', IconComponent: ShieldIcon }] : [{ id: VIEWS.EVALUATION, label: 'Evaluation Results', IconComponent: EvaluateIcon }]),
-                        { id: VIEWS.PROFILE, label: 'Profile Settings', IconComponent: UserIcon }
-                    ].map((item) => (
+                    {navItems.map((item) => (
                         <NavItem key={item.id} view={item.id} label={item.label} IconComponent={item.IconComponent} />
                     ))}
                 </div>
