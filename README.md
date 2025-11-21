@@ -1,315 +1,193 @@
-# 📘 Acadex — Student Academic Project Management System  
-*A modern React + Firebase application for managing academic projects end-to-end.*
+# Acadex – Academic Project Management System
 
-Acadex is a full-featured **Academic Project Management System** built using **React + Firebase**, designed for students, guides, and administrators to collaborate efficiently on academic or final-year projects.
-
----
-
-## 🚀 Features
-
-### 👤 Authentication
-- Email/password login & signup  
-- Google sign-in  
-- Anonymous guest login  
-- Auto-detect admin via email list  
-
-### 🧑‍🤝‍🧑 Team & Project Management
-- Create projects  
-- Invite members via email  
-- Accept/decline invitations  
-- Track team formation status  
-- Real-time project syncing via Firestore  
-
-### 📊 Task Progress Tracking
-- Assign tasks (Lead only)  
-- Toggle completed status  
-- Auto progress calculation  
-- Live updates for all team members  
-
-### 📝 Report Writing & Submission
-- Markdown-style long text editor  
-- Attach external file links (Drive/MediaFire)  
-- Save drafts  
-- Final submission lock  
-
-### 🛡️ Admin Console
-- View all projects & users  
-- Edit project name / team name  
-- Delete projects & user data  
-- Open detailed submission view  
-- Evaluate submissions (Rubric-based)  
-- Provide feedback  
-- Mark evaluation as complete  
-
-### 🎨 Dynamic UI / UX
-- TailwindCSS styling  
-- Light & dark theme  
-- Admin-specific accent theme  
-- Responsive layout  
-- Toast notifications  
+A beginner-friendly, full-stack academic project management web app built using **React**, **Firebase Authentication**, and **Firestore**. Acadex helps students create teams, manage project tasks, submit reports, and helps faculty/admins review and grade projects — all in one place.
 
 ---
 
-## 🏗️ Tech Stack
+## 🚀 Admin (Development) Login
 
-| Category | Technology |
-|----------|------------|
-| Frontend | React + Hooks |
-| Styling | TailwindCSS |
-| Backend | Firebase Authentication |
-| Database | Firebase Firestore |
-| Deployment | Vercel / Netlify |
+These credentials are **only for testing/demo**.  
+⚠️ Do NOT use these in production.
 
----
+Email:    admin@acadex.edu
+Password: admin@123
 
-## 📂 Folder Structure (Simplified)
-
-```
-src/
- ├── App.jsx
- ├── index.js
- ├── styles.css
-public/
- └── logo.png
-```
-
-> The entire application currently lives inside a single `App.jsx` file for simplicity.
+Admins are recognized using a list of approved admin emails inside the application code.
 
 ---
 
-## 🔧 Setup Guide (Beginner Friendly)
+## 🎯 What Acadex Does (Simplest Explanation)
 
-### 1️⃣ Install Node.js
+- Students sign up or log in.
+- They create a project + team or join a team via email.
+- Each member accepts the invitation → project becomes active.
+- Students can:
+  - Add tasks
+  - Track team progress
+  - Attach files/links
+  - Write and submit reports
+- Admins can:
+  - View all projects
+  - Read reports
+  - Download exports
+  - Give grades + feedback
 
-Download from: https://nodejs.org
+Everything is stored in Firebase Firestore.
 
-Check installation:
+---
 
-```bash
-node -v
-npm -v
-```
+## 📦 Tech Stack
+
+### Frontend
+- React (Vite or CRA)
+- HTML + CSS (Tailwind optional)
+- Single-file main component `App.jsx`
+
+### Backend (Serverless)
+- Firebase Authentication
+- Firestore Database
 
 ---
 
-### 2️⃣ Create Your Project (Vite)
+## 🛠️ Project Setup (Beginner Friendly)
 
-```bash
-npm create vite@latest acadex
-cd acadex
-npm install
-```
+### 1️⃣ Install Required Software
+- Node.js
+- npm
+- A Firebase account (free)
 
-Replace the default `App.jsx` with your own.
+### 2️⃣ Create or Clone Project
 
----
+git clone <your-repo-url>
+cd project-folder
+
+Or create a new React app and place `App.jsx` inside `/src`.
 
 ### 3️⃣ Install Dependencies
 
-```bash
 npm install firebase
-npm install -D tailwindcss postcss autoprefixer
-npx tailwindcss init -p
-```
 
-Enable Tailwind in **tailwind.config.js**:
+### 4️⃣ Setup Firebase
 
-```js
-export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,jsx}",
-  ],
-  theme: { extend: {} },
-  plugins: [],
-}
-```
+1. Go to Firebase Console
+2. Create a project
+3. Add Web App
+4. Enable:
+   - Email/Password Auth
+   - Google Auth (optional)
+5. Create Firestore (start in test mode for development)
 
-Add Tailwind imports to **index.css**:
+### 5️⃣ Add Firebase Config to .env
 
-```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-```
+VITE_FIREBASE_API_KEY=xxxx
+VITE_FIREBASE_AUTH_DOMAIN=xxxx
+VITE_FIREBASE_PROJECT_ID=xxxx
+VITE_FIREBASE_STORAGE_BUCKET=xxxx
+VITE_FIREBASE_MESSAGING_SENDER_ID=xxxx
+VITE_FIREBASE_APP_ID=xxxx
+VITE_FIREBASE_MEASUREMENT_ID=xxxx
 
----
+Restart the dev server after creating `.env`.
 
-## 🔐 Firebase Setup
+### 6️⃣ Run the App
 
-Your Firebase config should look like this inside `App.jsx`:
-
-```js
-const firebaseConfig = {
-  apiKey: "...",
-  authDomain: "...",
-  projectId: "...",
-  storageBucket: "...",
-  messagingSenderId: "...",
-  appId: "...",
-};
-```
-
-Ensure the following are enabled in Firebase Console:  
-✔ Authentication  
-✔ Firestore Database  
-
----
-
-## ▶️ Running the App
-
-```bash
 npm run dev
-```
 
-Open the local URL shown in your terminal.
+Open the URL shown (usually http://localhost:5173).
 
 ---
 
-## 🛠️ Core Features Explained
+## 🧠 How the App Works (Behind the Scenes)
 
-### 1. User Profiles
-Stored in Firestore at:
+### 🔐 Firebase Auth Flow
+- User signs in → Auth updates
+- User document is created in Firestore if missing
+- Certain email addresses are flagged as admins
 
-```
+### 📁 Firestore Structure (Simplified)
+
 artifacts/{appId}/users/{userId}
-```
+artifacts/{appId}/public/data/projects/{projectId}
 
-### 2. Projects
+### 👥 Team Management
+- Member emails added as “pending”
+- Members accept invite
+- When all accept → full project features unlock
 
-Stored under:
-
-```
-artifacts/{appId}/public/data/projects
-```
-
-Each project includes tasks, report, members list, evaluation, and supporting files.
-
-### 3. Task Structure
-
-```json
-{
-  "id": "uuid",
-  "title": "",
-  "assigneeId": "",
-  "assigneeName": "",
-  "dueDate": "",
-  "completed": false
-}
-```
+### 📝 Reports & Files
+- Students save draft reports
+- Final report stored in Firestore
+- File links saved in a `files` array
+- Admins view + grade submissions
 
 ---
 
-## 🛡️ Admin Panel Features
+## 🔧 Commands Guide
 
-Admins can:
-
-- View all projects  
-- View all registered users  
-- Edit project/team name  
-- Delete project or user data  
-- Open project submission details  
-- Evaluate using rubric  
-- Mark evaluation status  
-
-### Rubric:
-- Innovation: 40 pts  
-- Execution: 30 pts  
-- Documentation: 30 pts  
+npm install   → installs dependencies
+npm run dev   → runs local dev server
+npm run build → production build
+npm run preview → preview production build
 
 ---
 
-## 🌐 Deployment (Vercel)
+## 🧩 Features Breakdown
 
-1. Push your repo to GitHub  
-2. Go to https://vercel.com  
-3. Import your repository  
-4. Build command:
+### For Students
+- Create/join project teams
+- Accept invitations
+- Manage tasks
+- Write/edit reports
+- Submit final report
+- View grades/feedback
 
-```
-npm run build
-```
-
-5. Output directory:
-
-```
-dist
-```
-
-6. Deploy 🎉
+### For Admins
+- Admin dashboard
+- View all projects
+- Review reports
+- Give grades/feedback
+- Export project details
 
 ---
 
-## 🧩 Environment Variables (Optional)
-
-To hide Firebase config, create:
-
-```
-.env
-```
-
-Add:
-
-```
-VITE_API_KEY=xxxx
-VITE_AUTH_DOMAIN=xxxx
-VITE_PROJECT_ID=xxxx
-VITE_STORAGE_BUCKET=xxxx
-VITE_MESSAGING_SENDER_ID=xxxx
-VITE_APP_ID=xxxx
-```
-
-Use inside code:
-
-```js
-apiKey: import.meta.env.VITE_API_KEY
-```
+## ⚠️ Security Notes
+- Never upload `.env` to GitHub
+- Use Firebase security rules in production
+- Avoid hardcoding admin emails
+- Replace demo credentials before deploying
 
 ---
 
-## 🤝 Contributing
+## 🧪 Troubleshooting
 
-1. Fork the repository  
-2. Create feature branch  
-3. Commit changes  
-4. Push and open PR  
+### Missing Env Vars
+Check `.env` and restart server.
 
----
+### Admin Not Detected
+Ensure email exists in `ADMIN_EMAILS`.
 
-## 🧯 Troubleshooting
+### Google Login Issues
+Enable Google Auth in Firebase.
 
-### Firebase Auth not working?
-Enable:
-- Email/Password  
-- Google  
-- Anonymous  
-
-### Firestore Permission Denied?
-Use this during development:
-
-```js
-allow read, write: if true;
-```
+### Firestore Permission Denied
+Check Firestore security rules.
 
 ---
 
-## 🎉 Summary
-
-Acadex is a powerful academic project management system supporting:
-
-✔ Authentication  
-✔ Team creation  
-✔ Real-time task tracking  
-✔ Report writing  
-✔ Admin evaluation  
-✔ Beautiful UI/UX with Tailwind  
-✔ Fully Firebase-backed  
-
-This app is ready for deployment and expansion.
+## 📚 Recommended Learning Resources
+- Firebase Auth
+- Firestore Docs
+- Vite + React Docs
 
 ---
 
-## 📄 License
+## ❤️ Contribution Guide
+1. Fork repo
+2. Create branch
+3. Make changes
+4. Submit PR
 
-MIT License (recommended).  
-Ask if you'd like me to generate one for you.
+---
+
+## 📝 License
+MIT License — free to use, modify, and distribute.
