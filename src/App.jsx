@@ -26,11 +26,6 @@ import {
     deleteDoc
 } from 'firebase/firestore';
 
-// --- NEW LIBRARIES ---
-import { jsPDF } from "jspdf";
-import "jspdf-autotable";
-import { motion, AnimatePresence } from "framer-motion";
-
 // --- Icons ---
 const Icon = ({ children, className }) => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{children}</svg>
@@ -47,6 +42,15 @@ const UserIcon = (props) => <Icon {...props}><path d="M19 21v-2a4 4 0 0 0-4-4H9a
 const SunIcon = (props) => <Icon {...props}><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></Icon>;
 const MoonIcon = (props) => <Icon {...props}><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></Icon>;
 const ShieldIcon = (props) => <Icon {...props}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></Icon>;
+const LinkIcon = (props) => <Icon {...props}><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></Icon>;
+const FileIcon = (props) => <Icon {...props}><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></Icon>;
+const SaveIcon = (props) => <Icon {...props}><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></Icon>;
+const SendIcon = (props) => <Icon {...props}><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></Icon>;
+const MailIcon = (props) => <Icon {...props}><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></Icon>;
+const ClockIcon = (props) => <Icon {...props}><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></Icon>;
+const CameraIcon = (props) => <Icon {...props}><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></Icon>;
+const EyeIcon = (props) => <Icon {...props}><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></Icon>;
+const GoogleIcon = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className={className}><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" /><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" /><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" /><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" /></svg>;
 const LinkExternalIcon = (props) => <Icon {...props}><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></Icon>;
 const HomeIcon = (props) => <Icon {...props}><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></Icon>;
 const MenuIcon = (props) => <Icon {...props}><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></Icon>;
@@ -54,12 +58,13 @@ const XIcon = (props) => <Icon {...props}><line x1="18" y1="6" x2="6" y2="18"/><
 const EditIcon = (props) => <Icon {...props}><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></Icon>;
 const CodeIcon = (props) => <Icon {...props}><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></Icon>;
 const UsersIcon = (props) => <Icon {...props}><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></Icon>;
+// New Icons for Features
 const LayoutIcon = (props) => <Icon {...props}><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><line x1="3" y1="9" x2="21" y2="9" /><line x1="9" y1="21" x2="9" y2="9" /></Icon>;
 const CalendarIcon = (props) => <Icon {...props}><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></Icon>;
 const MessageSquareIcon = (props) => <Icon {...props}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></Icon>;
 const BellIcon = (props) => <Icon {...props}><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" /></Icon>;
 const DownloadIcon = (props) => <Icon {...props}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></Icon>;
-const FileTextIcon = (props) => <Icon {...props}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></Icon>;
+const PieChartIcon = (props) => <Icon {...props}><path d="M21.21 15.89A10 10 0 1 1 8 2.83" /><path d="M22 12A10 10 0 0 0 12 2v10z" /></Icon>;
 
 const VIEWS = { DASHBOARD: 'Dashboard', REGISTRATION: 'Registration', TRACKING: 'Progress', REPORTS: 'Reports', DATABASE: 'Projects', EVALUATION: 'Evaluation', ADMIN: 'Admin', PROFILE: 'Profile' };
 const AUTH_VIEWS = { INIT: 'Initial', LOGIN: 'Login', SIGNUP: 'SignUp' };
@@ -97,6 +102,8 @@ export default function App() {
     const [adminSelectedProject, setAdminSelectedProject] = useState(null);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [showRawData, setShowRawData] = useState(false);
+    
+    // New State for Notification Center
     const [showNotifications, setShowNotifications] = useState(false);
 
     const toggleTheme = () => setDarkMode(!darkMode);
@@ -117,6 +124,7 @@ export default function App() {
             ? 'bg-slate-800 border-slate-700 text-white placeholder-gray-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500' 
             : 'bg-white border-slate-300 text-slate-900 placeholder-slate-400 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600',
         
+        // Catchy Theme for Students (Violet/Fuchsia)
         accentPrimary: isUserAdmin 
             ? 'bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 text-white shadow-xl shadow-cyan-500/40' 
             : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-700 hover:to-fuchsia-700 text-white shadow-xl shadow-fuchsia-500/40',
@@ -348,6 +356,7 @@ export default function App() {
         return userTeam && userTeam.members.every(m => m.status === 'accepted');
     }, [userTeam]);
 
+    // Helper: Calculate Notifications
     const notifications = useMemo(() => {
         if (!userTeam) return [];
         const alerts = [];
@@ -357,97 +366,18 @@ export default function App() {
         return alerts;
     }, [userTeam]);
 
-    // --- STEP 5: PDF EXPORT FUNCTIONALITY ---
-    const exportProjectPDF = (project) => {
-        if (!project) return;
-        const doc = new jsPDF();
-        
-        // Header
-        doc.setFillColor(6, 182, 212); // Cyan color
-        doc.rect(0, 0, 210, 30, 'F');
-        doc.setTextColor(255, 255, 255);
-        doc.setFontSize(22);
-        doc.text("ACADEX GRADE CARD", 105, 20, { align: 'center' });
-        
-        // Project Details
-        doc.setTextColor(0, 0, 0);
-        doc.setFontSize(14);
-        doc.text(`Project Title: ${project.name}`, 20, 45);
-        doc.setFontSize(12);
-        doc.text(`Team: ${project.teamName}`, 20, 55);
-        doc.text(`Supervisor: ${project.supervisor || 'N/A'}`, 20, 65);
-        doc.text(`Date: ${new Date().toLocaleDateString()}`, 150, 45);
-
-        // Team Members Table
-        const membersData = (project.members || []).map(m => [m.name, m.role, m.email]);
-        doc.autoTable({
-            startY: 75,
-            head: [['Name', 'Role', 'Email']],
-            body: membersData,
-            headStyles: { fillColor: [6, 182, 212] },
-        });
-
-        // Scores & Evaluation
-        const evalY = doc.lastAutoTable.finalY + 15;
-        doc.setFontSize(14);
-        doc.text("Performance Evaluation", 20, evalY);
-        
-        const breakdown = project.evaluation?.breakdown || { innovation: 0, execution: 0, documentation: 0 };
-        const scoreData = [
-            ['Criteria', 'Score', 'Max'],
-            ['Innovation', breakdown.innovation, '40'],
-            ['Execution', breakdown.execution, '30'],
-            ['Documentation', breakdown.documentation, '30'],
-            ['TOTAL', project.evaluation?.score || 0, '100']
-        ];
-
-        doc.autoTable({
-            startY: evalY + 5,
-            head: [['Criteria', 'Score', 'Max']],
-            body: scoreData,
-            theme: 'striped',
-            headStyles: { fillColor: [88, 28, 135] }, // Dark Purple
-        });
-
-        // Feedback
-        const feedbackY = doc.lastAutoTable.finalY + 15;
-        doc.setFontSize(12);
-        doc.setTextColor(100);
-        doc.text("Instructor Feedback:", 20, feedbackY);
-        doc.setFontSize(10);
-        doc.setTextColor(0);
-        const feedbackLines = doc.splitTextToSize(project.evaluation?.feedback || "No feedback provided.", 170);
-        doc.text(feedbackLines, 20, feedbackY + 7);
-
-        // Footer
-        doc.setFontSize(8);
-        doc.text("Generated by Acadex Project Suite. This is a computer generated document.", 105, 280, { align: 'center' });
-
-        doc.save(`${project.name.replace(/\s+/g, '_')}_GradeCard.pdf`);
-        alertUser('success', 'PDF Generated Successfully');
-    };
-
     const Card = ({ children, className = "" }) => (
-        <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className={`${theme.card} rounded-3xl p-6 transition-colors duration-300 ${className}`}
-        >
-            {children}
-        </motion.div>
+        <div className={`${theme.card} rounded-3xl p-6 transition-all duration-300 ${className}`}>{children}</div>
     );
 
     const Button = ({ children, variant = "primary", onClick, className = "", ...props }) => (
-        <motion.button 
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.95 }}
+        <button 
             onClick={onClick} 
-            className={`px-6 py-3 rounded-xl font-semibold flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed ${variant === 'primary' ? theme.accentPrimary : theme.accentSecondary} ${className}`} 
+            className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed ${variant === 'primary' ? theme.accentPrimary : theme.accentSecondary} ${className}`} 
             {...props}
         >
             {children}
-        </motion.button>
+        </button>
     );
 
     const Input = (props) => (
@@ -497,19 +427,6 @@ export default function App() {
                 </div>
             </div>
         </footer>
-    );
-
-    // --- Reusable Page Transition Wrapper ---
-    const PageTransition = ({ children }) => (
-        <motion.div
-            key={currentView}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-        >
-            {children}
-        </motion.div>
     );
 
     const ProfileView = () => {
@@ -760,19 +677,18 @@ export default function App() {
         return null;
     };
 
+    // --- NEW: Enhanced Progress Tracking (Kanban + Calendar + Comments) ---
     const ProgressTrackingView = () => {
         if (!userTeam || !isTeamActive) return <ProjectRequiredMessage viewName={VIEWS.TRACKING} />;
-        
+        const [viewMode, setViewMode] = useState('list'); // list, board, calendar
         const isLead = userTeam.members.find(m => m.id === userId)?.role === 'Lead';
-        const [viewMode, setViewMode] = useState('list');
-        const [newTask, setNewTask] = useState({ title: '', assigneeId: userTeam.members.find(m => m.id === userId)?.id || userTeam.members[0]?.id, date: '' });
-        const [commentTask, setCommentTask] = useState(null);
+        const [newTask, setNewTask] = useState({ title: '', assigneeId: userTeam.members[0]?.id, date: '' });
+        const [commentTask, setCommentTask] = useState(null); // Task ID for comment modal
         const [newComment, setNewComment] = useState('');
 
         const addTask = async () => {
-            if (!newTask.title || !newTask.date) return alertUser('error', 'Please fill in all task details');
+            if (!newTask.title || !newTask.date) return alertUser('error', 'Please fill details');
             const assignee = userTeam.members.find(m => m.id === newTask.assigneeId) || userTeam.members[0];
-            
             const task = {
                 id: crypto.randomUUID(),
                 title: newTask.title,
@@ -780,27 +696,15 @@ export default function App() {
                 assigneeName: assignee.name,
                 dueDate: newTask.date,
                 completed: false,
-                status: 'To Do',
-                comments: [],
+                status: 'To Do', // New field for Kanban
+                comments: [], // New field for comments
                 createdAt: new Date().toISOString()
             };
-            const updatedTasks = [...(userTeam.tasks || []), task];
-            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'projects', userTeam.id), { tasks: updatedTasks });
+            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'projects', userTeam.id), { tasks: [...(userTeam.tasks || []), task] });
             setNewTask({ title: '', assigneeId: userId, date: '' });
-            alertUser('success', 'Task assigned');
         };
 
-        const toggleTask = async (taskId, currentStatus, assigneeId) => {
-            if (!isLead && userId !== assigneeId) {
-                alertUser('error', "Only the assignee or Team Lead can update this task.");
-                return;
-            }
-            const updatedTasks = (userTeam.tasks || []).map(t => 
-                t.id === taskId ? { ...t, completed: !currentStatus, status: !currentStatus ? 'Done' : 'To Do' } : t
-            );
-            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'projects', userTeam.id), { tasks: updatedTasks });
-        };
-
+        // Update status (Kanban drag simulation)
         const moveTask = async (task, direction) => {
             const statuses = ['To Do', 'In Progress', 'Done'];
             const currentIndex = statuses.indexOf(task.status || (task.completed ? 'Done' : 'To Do'));
@@ -820,23 +724,11 @@ export default function App() {
             setNewComment('');
         };
 
-        const deleteTask = async (taskId) => {
-             if (!isLead) return alertUser('error', 'Only the Team Lead can delete tasks.');
-             const updatedTasks = (userTeam.tasks || []).filter(t => t.id !== taskId);
-             await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'projects', userTeam.id), { tasks: updatedTasks });
-             alertUser('success', 'Task deleted.');
-        };
-
-        const tasks = userTeam.tasks || [];
-        const sortedTasks = [...tasks].sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-
+        // Render Logic
         return (
-            <div className="max-w-6xl mx-auto space-y-8">
+            <div className="max-w-6xl mx-auto space-y-6">
                 <div className="flex justify-between items-center">
-                    <div>
-                        <h1 className={`text-4xl font-extrabold ${theme.heading}`}>Tasks & Progress</h1>
-                        <h2 className={`text-lg font-bold ${theme.heading} text-fuchsia-500`}>{userTeam.name}</h2>
-                    </div>
+                    <h1 className={`text-4xl font-extrabold ${theme.heading}`}>Project Tasks</h1>
                     <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
                         {['list', 'board', 'calendar'].map(m => (
                             <button key={m} onClick={() => setViewMode(m)} className={`px-4 py-2 rounded-md text-sm capitalize font-medium transition-all ${viewMode === m ? `bg-white dark:bg-gray-700 shadow ${isUserAdmin ? 'text-cyan-500' : 'text-fuchsia-500'}` : theme.textSecondary}`}>
@@ -846,71 +738,47 @@ export default function App() {
                     </div>
                 </div>
 
+                {/* Add Task Form (Only visible to Lead or in List/Board view) */}
                 {isLead && (
-                    <Card>
-                        <h4 className={`text-xl font-bold mb-4 ${theme.heading} flex items-center`}><PlusIcon className="w-5 h-5 mr-2 text-fuchsia-500"/> Assign New Task</h4>
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                            <div className="md:col-span-2">
-                                <Input placeholder="Task Description" value={newTask.title} onChange={e => setNewTask({...newTask, title: e.target.value})} />
-                            </div>
-                            <select className={`w-full px-4 py-3 rounded-xl outline-none border ${theme.input}`} value={newTask.assigneeId} onChange={e => setNewTask({...newTask, assigneeId: e.target.value})}>
+                    <Card className="mb-6">
+                        <div className="flex flex-col md:flex-row gap-4">
+                            <Input placeholder="New Task Title" value={newTask.title} onChange={e => setNewTask({...newTask, title: e.target.value})} />
+                            <select className={`px-4 py-3 rounded-xl outline-none border ${theme.input}`} value={newTask.assigneeId} onChange={e => setNewTask({...newTask, assigneeId: e.target.value})}>
                                 {userTeam.members.map(m => <option key={m.id} value={m.id}>{m.name}</option>)}
                             </select>
                             <Input type="date" value={newTask.date} onChange={e => setNewTask({...newTask, date: e.target.value})} />
+                            <Button onClick={addTask}>Add</Button>
                         </div>
-                        <Button onClick={addTask} className="w-full mt-4">Assign Task</Button>
                     </Card>
                 )}
 
+                {/* LIST VIEW */}
                 {viewMode === 'list' && (
-                    <Card>
-                        <div className="space-y-3">
-                            <AnimatePresence>
-                            {sortedTasks.map(t => (
-                                <motion.div 
-                                    key={t.id}
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, x: -20 }}
-                                    className={`flex items-center justify-between p-4 rounded-xl border transition-all duration-300 ${t.completed ? (darkMode ? 'bg-emerald-900/10 border-emerald-900/30 opacity-70' : 'bg-emerald-50 border-emerald-200 opacity-70') : (darkMode ? 'bg-gray-900/50 border-gray-700 hover:border-fuchsia-500' : 'bg-white border-gray-100 shadow-sm hover:shadow-md')}`}
-                                >
-                                    <div className="flex items-center gap-4 overflow-hidden">
-                                        <button 
-                                            onClick={() => toggleTask(t.id, t.completed, t.assigneeId)}
-                                            className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors flex-shrink-0 ${
-                                                t.completed ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-gray-400 text-transparent hover:border-fuchsia-500 hover:bg-fuchsia-500/10'
-                                            } ${(!isLead && userId !== t.assigneeId) ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                            disabled={!isLead && userId !== t.assigneeId}
-                                        >
-                                            <CheckCircleIcon className="w-4 h-4" />
-                                        </button>
-                                        <div className="min-w-0">
-                                            <p className={`font-medium truncate ${t.completed ? 'line-through opacity-70' : ''} ${theme.textPrimary}`}>{t.title}</p>
-                                            <div className="flex items-center gap-3 mt-1 text-xs">
-                                                <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800">
-                                                    <div className="w-4 h-4 rounded-full bg-fuchsia-500 flex items-center justify-center text-[8px] text-white font-bold">{t.assigneeName?.charAt(0)}</div>
-                                                    <span className={`${theme.textSecondary}`}>{t.assigneeName}</span>
-                                                </div>
-                                                <span className={`${theme.textSecondary} flex items-center gap-1`}>
-                                                    <ClockIcon className="w-3 h-3"/> Due: {t.dueDate}
-                                                </span>
-                                            </div>
-                                        </div>
+                    <div className="space-y-3">
+                        {userTeam.tasks?.length === 0 && <div className="text-center py-10 opacity-50">No tasks yet. Add one above!</div>}
+                        {userTeam.tasks?.map(t => (
+                            <div key={t.id} className={`flex items-center justify-between p-4 rounded-xl border ${darkMode ? 'bg-gray-900/50 border-gray-800' : 'bg-white border-gray-100 shadow-sm'}`}>
+                                <div className="flex items-center gap-4">
+                                    <button onClick={() => moveTask(t, 1)} className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${t.completed ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-gray-400'}`}>
+                                        {t.completed && <CheckCircleIcon className="w-4 h-4" />}
+                                    </button>
+                                    <div>
+                                        <p className={`font-medium ${t.completed ? 'line-through opacity-50' : ''} ${theme.textPrimary}`}>{t.title}</p>
+                                        <p className="text-xs text-gray-500">{t.assigneeName} • {t.status || 'To Do'}</p>
                                     </div>
-                                    <div className="flex items-center gap-2">
-                                        <button onClick={() => setCommentTask(t)} className="p-2 text-gray-400 hover:text-fuchsia-500 relative">
-                                            <MessageSquareIcon className="w-5 h-5"/>
-                                            {t.comments?.length > 0 && <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>}
-                                        </button>
-                                        {isLead && <button onClick={() => deleteTask(t.id)} className="text-gray-400 hover:text-rose-500 p-2 flex-shrink-0 transition-colors"><TrashIcon className="w-4 h-4" /></button>}
-                                    </div>
-                                </motion.div>
-                            ))}
-                            </AnimatePresence>
-                        </div>
-                    </Card>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <button onClick={() => setCommentTask(t)} className="p-2 text-gray-400 hover:text-fuchsia-500 relative">
+                                        <MessageSquareIcon className="w-5 h-5"/>
+                                        {t.comments?.length > 0 && <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>}
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 )}
 
+                {/* KANBAN BOARD VIEW */}
                 {viewMode === 'board' && (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {['To Do', 'In Progress', 'Done'].map(status => (
@@ -919,16 +787,8 @@ export default function App() {
                                     {status} <span className="bg-gray-200 dark:bg-gray-700 px-2 rounded text-xs py-1">{userTeam.tasks?.filter(t => (t.status || (t.completed ? 'Done' : 'To Do')) === status).length}</span>
                                 </h3>
                                 <div className="space-y-3">
-                                    <AnimatePresence>
                                     {userTeam.tasks?.filter(t => (t.status || (t.completed ? 'Done' : 'To Do')) === status).map(t => (
-                                        <motion.div 
-                                            layout 
-                                            key={t.id} 
-                                            initial={{ opacity: 0, scale: 0.9 }}
-                                            animate={{ opacity: 1, scale: 1 }}
-                                            exit={{ opacity: 0, scale: 0.9 }}
-                                            className={`p-3 rounded-xl border ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200 shadow-sm'}`}
-                                        >
+                                        <div key={t.id} className={`p-3 rounded-xl border ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200 shadow-sm'}`}>
                                             <p className={`text-sm font-medium mb-2 ${theme.textPrimary}`}>{t.title}</p>
                                             <div className="flex justify-between items-center">
                                                 <span className="text-[10px] uppercase tracking-wider text-gray-500">{t.assigneeName}</span>
@@ -937,15 +797,15 @@ export default function App() {
                                                     {status !== 'Done' && <button onClick={() => moveTask(t, 1)} className="text-xs px-2 py-1 bg-fuchsia-100 text-fuchsia-600 dark:bg-fuchsia-900/30 rounded hover:opacity-80">→</button>}
                                                 </div>
                                             </div>
-                                        </motion.div>
+                                        </div>
                                     ))}
-                                    </AnimatePresence>
                                 </div>
                             </div>
                         ))}
                     </div>
                 )}
 
+                {/* CALENDAR VIEW (Simplified List sorted by Date) */}
                 {viewMode === 'calendar' && (
                     <div className="space-y-6">
                         {Object.entries(userTeam.tasks?.reduce((acc, task) => {
@@ -971,6 +831,7 @@ export default function App() {
                     </div>
                 )}
 
+                {/* COMMENT MODAL */}
                 {commentTask && (
                     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
                         <Card className="w-full max-w-md">
@@ -990,6 +851,124 @@ export default function App() {
                             </div>
                             <button onClick={() => setCommentTask(null)} className="w-full mt-2 text-xs text-gray-500 hover:underline">Close</button>
                         </Card>
+                    </div>
+                )}
+            </div>
+        );
+    };
+
+    const ReportView = () => {
+        if (!userTeam || !isTeamActive) return <ProjectRequiredMessage viewName={VIEWS.REPORTS} />;
+        const [content, setContent] = useState(userTeam.report || '');
+        const [files, setFiles] = useState(userTeam.files || []);
+        const [fileNameInput, setFileNameInput] = useState('');
+        const [fileLinkInput, setFileLinkInput] = useState('');
+        const reportStatus = userTeam.reportStatus || 'Draft';
+        const isSubmitted = reportStatus === 'Submitted';
+
+        useEffect(() => {
+            if (userTeam) {
+                setContent(userTeam.report || '');
+                setFiles(userTeam.files || []);
+            }
+        }, [userTeam]);
+
+        const addFileLink = () => {
+             if (isSubmitted) return;
+             if (!fileNameInput || !fileLinkInput) return alertUser('error', 'File Name and Valid Link required');
+             if (!fileLinkInput.startsWith('http://') && !fileLinkInput.startsWith('https://')) return alertUser('error', 'Link must start with http/https');
+
+             const newFile = { 
+                 name: fileNameInput, 
+                 url: fileLinkInput, 
+                 date: new Date().toLocaleDateString(), 
+                 size: 'Link' 
+             };
+             const updatedFiles = [...files, newFile];
+             setFiles(updatedFiles);
+             updateReport(content, [], updatedFiles, 'Draft'); 
+             setFileNameInput('');
+             setFileLinkInput('');
+             alertUser('success', 'File link added');
+        };
+
+        return (
+            <div className="max-w-6xl mx-auto space-y-8">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h1 className={`text-4xl font-extrabold ${theme.heading}`}>Report Submission</h1>
+                        <p className={`${theme.textSecondary}`}>Project: <span className="text-fuchsia-500 font-medium">{userTeam.name}</span></p>
+                    </div>
+                    <div className={`px-4 py-2 rounded-full text-sm font-bold shadow-md ${isSubmitted ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300'}`}>Status: {reportStatus}</div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <Card className="lg:col-span-2 space-y-4">
+                        <h3 className={`text-xl font-bold ${theme.heading}`}>Executive Summary / Abstract</h3>
+                        <textarea 
+                            value={content} 
+                            onChange={e => setContent(e.target.value)} 
+                            rows="18" 
+                            disabled={isSubmitted} 
+                            className={`w-full p-5 rounded-2xl outline-none resize-y font-mono text-sm leading-relaxed ${theme.input} ${isSubmitted ? 'opacity-70 cursor-not-allowed' : ''}`} 
+                            placeholder="Use Markdown to structure your report abstract. Include your methodology, results, and conclusion here..." 
+                        />
+                    </Card>
+                    <div className="space-y-6">
+                        <Card>
+                            <h3 className={`text-lg font-bold ${theme.heading} mb-4 flex items-center`}><FileIcon className="w-5 h-5 mr-2 text-fuchsia-500"/> Supporting Files</h3>
+                            <p className={`text-xs ${theme.textSecondary} mb-4`}>Submit Google Drive or MediaFire links for your project files.</p>
+                            {!isSubmitted && (
+                                <div className={`border-2 border-dashed rounded-xl p-4 transition-colors mb-4 space-y-3 ${darkMode ? 'border-gray-700 bg-gray-800/20' : 'border-gray-300 bg-gray-50'}`}>
+                                    <Input 
+                                        value={fileNameInput} 
+                                        onChange={e => setFileNameInput(e.target.value)} 
+                                        placeholder="File Name (e.g., Final Presentation)" 
+                                        className="text-sm"
+                                    />
+                                    <Input 
+                                        value={fileLinkInput} 
+                                        onChange={e => setFileLinkInput(e.target.value)} 
+                                        placeholder="File Link (GDrive/MediaFire)" 
+                                        className="text-sm"
+                                    />
+                                    <Button onClick={addFileLink} className="w-full py-2 text-sm">
+                                        <PlusIcon className="w-4 h-4 mr-1"/> Add File Link
+                                    </Button>
+                                </div>
+                            )}
+                            <ul className="space-y-3 max-h-60 overflow-y-auto pr-2">{files.map((f, i) => (
+                                <li key={i} className={`flex items-center justify-between p-3 rounded-lg group ${darkMode ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-50 border border-gray-100 hover:bg-gray-100'} transition-colors`}>
+                                    <div className="overflow-hidden flex-1">
+                                        <div className="flex items-center">
+                                            <p className={`text-sm font-medium ${theme.textPrimary} truncate flex-1`}>{f.name}</p>
+                                            <a href={f.url} target="_blank" rel="noopener noreferrer" className={`ml-2 p-1 rounded hover:bg-fuchsia-100 dark:hover:bg-fuchsia-900/30 text-fuchsia-500 transition-colors`} title="Open Link">
+                                                <LinkExternalIcon className="w-4 h-4" />
+                                            </a>
+                                        </div>
+                                        <p className={`text-[10px] ${theme.textSecondary}`}>{f.size} | {f.date}</p>
+                                    </div>
+                                    {!isSubmitted && <button onClick={() => {
+                                        const newFiles = files.filter((_, idx) => idx !== i);
+                                        setFiles(newFiles);
+                                        updateReport(content, [], newFiles, 'Draft');
+                                    }} className="text-gray-400 hover:text-rose-500 ml-2"><TrashIcon className="w-4 h-4"/></button>}
+                                </li>
+                            ))}</ul>
+                        </Card>
+                    </div>
+                </div>
+                {!isSubmitted && (
+                    <div className={`sticky bottom-0 p-5 mt-8 ${theme.card} border-t backdrop-blur-lg rounded-2xl flex justify-between items-center z-20`}>
+                        <p className={`text-sm ${theme.textSecondary}`}>Last saved: {new Date().toLocaleTimeString()}</p>
+                        <div className="flex space-x-4">
+                            <Button variant="secondary" onClick={() => updateReport(content, [], files, 'Draft')}>
+                                <SaveIcon className="w-5 h-5 mr-2" /> Save Draft
+                            </Button>
+                            <Button onClick={() => updateReport(content, [], files, 'Submitted')}>
+                                <SendIcon className="w-5 h-5 mr-2" /> Submit Final
+                            </Button>
+                        </div>
                     </div>
                 )}
             </div>
@@ -1249,9 +1228,6 @@ export default function App() {
                                                 <button onClick={() => setEditProject(p)} className="text-amber-500 hover:bg-amber-100 dark:hover:bg-amber-900/20 p-2 rounded-xl" title="Edit Project Name">
                                                     <EditIcon className="w-4 h-4" />
                                                 </button>
-                                                <button onClick={() => exportProjectPDF(p)} className="text-emerald-500 hover:text-white dark:hover:bg-emerald-600/50 hover:bg-emerald-100 p-2 rounded-xl transition-colors" title="Export Grade Card PDF">
-                                                    <FileTextIcon className="w-4 h-4" />
-                                                </button>
                                                 <button onClick={() => setAdminSelectedProject(p)} className="text-cyan-500 hover:text-white dark:hover:bg-cyan-600/50 hover:bg-cyan-100 p-2 rounded-xl transition-colors" title="View Submission & Grade">
                                                     <EyeIcon className="w-4 h-4" />
                                                 </button>
@@ -1349,7 +1325,6 @@ export default function App() {
         }
 
         return (
-            <PageTransition>
             <div className="space-y-8">
                 <Card className={`flex flex-col md:flex-row gap-6 p-8 ${isUserAdmin ? 'bg-gradient-to-br from-cyan-700 to-teal-800' : 'bg-gradient-to-br from-violet-700 to-fuchsia-800'} !border-none text-white relative overflow-hidden h-60 md:h-72 items-center`}>
                     <div className="absolute right-0 bottom-0 opacity-10 transform translate-y-1/3 translate-x-1/4"><DatabaseIcon width="300" height="300" /></div>
@@ -1435,7 +1410,6 @@ export default function App() {
                     </div>
                 )}
             </div>
-            </PageTransition>
         );
     };
 
@@ -1478,19 +1452,13 @@ export default function App() {
                     
                     {/* Notification Bell */}
                     <div className="relative">
-                        <motion.button whileTap={{scale:0.9}} onClick={() => setShowNotifications(!showNotifications)} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors relative">
+                        <button onClick={() => setShowNotifications(!showNotifications)} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors relative">
                             <BellIcon className="w-5 h-5" />
                             {notifications.length > 0 && <span className="absolute top-1 right-1 w-2 h-2 bg-rose-500 rounded-full"></span>}
-                        </motion.button>
+                        </button>
                         
-                        <AnimatePresence>
                         {showNotifications && (
-                            <motion.div 
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
-                                className="absolute right-0 top-12 w-64 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 p-4 z-50"
-                            >
+                            <div className="absolute right-0 top-12 w-64 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 p-4 z-50">
                                 <h4 className="text-sm font-bold mb-2">Notifications</h4>
                                 {notifications.length === 0 ? (
                                     <p className="text-xs text-gray-500">No new alerts.</p>
@@ -1503,9 +1471,8 @@ export default function App() {
                                         ))}
                                     </ul>
                                 )}
-                            </motion.div>
+                            </div>
                         )}
-                        </AnimatePresence>
                     </div>
 
                     <ThemeSwitch />
@@ -1542,91 +1509,89 @@ export default function App() {
             </div>
 
             <main className={`flex-1 w-full max-w-7xl mx-auto px-4 lg:px-8 pt-28 pb-12 transition-all duration-300`}>
-                <AnimatePresence mode="wait">
-                    <PageTransition key={currentView}>
-                        {currentView === VIEWS.DASHBOARD && <Dashboard />}
-                        {currentView === VIEWS.REGISTRATION && <RegistrationView />}
-                        {currentView === VIEWS.REPORTS && <ReportView />}
-                        {currentView === VIEWS.ADMIN && isUserAdmin && <AdminPanel />}
-                        {currentView === VIEWS.TRACKING && <ProgressTrackingView />}
-                        {currentView === VIEWS.PROFILE && <ProfileView />}
+                <div className="animate-fade-in">
+                    {currentView === VIEWS.DASHBOARD && <Dashboard />}
+                    {currentView === VIEWS.REGISTRATION && <RegistrationView />}
+                    {currentView === VIEWS.REPORTS && <ReportView />}
+                    {currentView === VIEWS.ADMIN && isUserAdmin && <AdminPanel />}
+                    {currentView === VIEWS.TRACKING && <ProgressTrackingView />}
+                    {currentView === VIEWS.PROFILE && <ProfileView />}
 
-                        {currentView === VIEWS.DATABASE && (
-                            <div className="space-y-8">
-                                <h1 className={`text-4xl font-extrabold ${theme.heading}`}>Project Directory</h1>
-                                <p className={`text-lg ${theme.textSecondary}`}>Browse all registered projects and track their high-level progress.</p>
-                                
-                                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                                    {projects.map(p => {
-                                        const progress = ((p.tasks || []).filter(t => t.completed).length / ((p.tasks || []).length || 1)) * 100;
-                                        return (
-                                        <Card key={p.id} className="relative overflow-hidden group hover:border-indigo-500/50">
-                                            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><DatabaseIcon width="80" height="80" className="text-indigo-400"/></div>
-                                            <h3 className={`text-xl font-bold ${theme.heading} mb-1`}>{p.name}</h3>
-                                            <p className={`text-sm ${theme.textSecondary} mb-4`}>Team: {p.teamName}</p>
-                                            <div className="flex items-center gap-3 mb-4">
-                                                <div className={`px-3 py-1 rounded-full text-xs font-semibold ${p.evaluation?.status === 'Completed' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300'}`}>
-                                                    {p.evaluation?.status || 'Pending'}
-                                                </div>
-                                                {p.evaluation?.status === 'Completed' && <span className="font-bold text-indigo-500 text-sm">{p.evaluation.score}/100</span>}
+                    {currentView === VIEWS.DATABASE && (
+                        <div className="space-y-8">
+                            <h1 className={`text-4xl font-extrabold ${theme.heading}`}>Project Directory</h1>
+                            <p className={`text-lg ${theme.textSecondary}`}>Browse all registered projects and track their high-level progress.</p>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                                {projects.map(p => {
+                                    const progress = ((p.tasks || []).filter(t => t.completed).length / ((p.tasks || []).length || 1)) * 100;
+                                    return (
+                                    <Card key={p.id} className="relative overflow-hidden group hover:border-indigo-500/50">
+                                        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><DatabaseIcon width="80" height="80" className="text-indigo-400"/></div>
+                                        <h3 className={`text-xl font-bold ${theme.heading} mb-1`}>{p.name}</h3>
+                                        <p className={`text-sm ${theme.textSecondary} mb-4`}>Team: {p.teamName}</p>
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <div className={`px-3 py-1 rounded-full text-xs font-semibold ${p.evaluation?.status === 'Completed' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300'}`}>
+                                                {p.evaluation?.status || 'Pending'}
                                             </div>
-                                            <div className="text-sm font-medium mb-2 flex justify-between">
-                                                <span className={theme.textSecondary}>Task Progress</span>
-                                                <span className={theme.textPrimary}>{Math.round(progress)}%</span>
+                                            {p.evaluation?.status === 'Completed' && <span className="font-bold text-indigo-500 text-sm">{p.evaluation.score}/100</span>}
+                                        </div>
+                                        <div className="text-sm font-medium mb-2 flex justify-between">
+                                            <span className={theme.textSecondary}>Task Progress</span>
+                                            <span className={theme.textPrimary}>{Math.round(progress)}%</span>
+                                        </div>
+                                        <div className="w-full bg-gray-200 dark:bg-gray-700 h-2 rounded-full overflow-hidden shadow-inner">
+                                            <div className="h-full bg-gradient-to-r from-violet-500 to-fuchsia-500 transition-all duration-700" style={{width: `${progress}%`}}></div>
+                                        </div>
+                                    </Card>
+                                );})}
+                            </div>
+                        </div>
+                    )}
+                    
+                    {currentView === VIEWS.EVALUATION && userTeam && (
+                        <div className="max-w-3xl mx-auto">
+                            <h1 className={`text-4xl font-extrabold mb-8 ${theme.heading}`}>Evaluation Results</h1>
+                            <h2 className={`text-xl font-bold mb-8 ${theme.heading} text-fuchsia-500`}>{userTeam.name}</h2>
+                            <Card>
+                                <div className={`p-8 rounded-2xl text-center ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+                                    <EvaluateIcon className="w-12 h-12 mx-auto text-fuchsia-500 mb-4"/>
+                                    <p className={`text-lg font-medium ${theme.textPrimary} mb-4`}>{userTeam.evaluation.status}</p>
+                                    <div className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-violet-500 to-fuchsia-600 mb-6">
+                                        {userTeam.evaluation.score}/100
+                                    </div>
+
+                                    {userTeam.evaluation.breakdown && (
+                                        <div className="grid grid-cols-3 gap-4 mb-8 max-w-md mx-auto">
+                                            <div className="p-3 bg-gray-800/50 rounded-lg">
+                                                <div className="text-xs text-gray-400 uppercase">Innovation</div>
+                                                <div className="text-xl font-bold text-white">{userTeam.evaluation.breakdown.innovation || 0}</div>
                                             </div>
-                                            <div className="w-full bg-gray-200 dark:bg-gray-700 h-2 rounded-full overflow-hidden shadow-inner">
-                                                <div className="h-full bg-gradient-to-r from-violet-500 to-fuchsia-500 transition-all duration-700" style={{width: `${progress}%`}}></div>
+                                            <div className="p-3 bg-gray-800/50 rounded-lg">
+                                                <div className="text-xs text-gray-400 uppercase">Execution</div>
+                                                <div className="text-xl font-bold text-white">{userTeam.evaluation.breakdown.execution || 0}</div>
                                             </div>
-                                        </Card>
-                                    );})}
+                                            <div className="p-3 bg-gray-800/50 rounded-lg">
+                                                <div className="text-xs text-gray-400 uppercase">Docs</div>
+                                                <div className="text-xl font-bold text-white">{userTeam.evaluation.breakdown.documentation || 0}</div>
+                                            </div>
+                                        </div>
+                                    )}
+                                    
+                                    <div className={`text-left p-6 rounded-xl ${darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'}`}>
+                                        <p className={`text-sm font-bold ${theme.textSecondary} uppercase mb-3 border-b pb-2 ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>Instructor Feedback</p>
+                                        <p className={theme.textPrimary}>{userTeam.evaluation.feedback}</p>
+                                    </div>
                                 </div>
-                            </div>
-                        )}
-                        
-                        {currentView === VIEWS.EVALUATION && userTeam && (
-                            <div className="max-w-3xl mx-auto">
-                                <h1 className={`text-4xl font-extrabold mb-8 ${theme.heading}`}>Evaluation Results</h1>
-                                <h2 className={`text-xl font-bold mb-8 ${theme.heading} text-fuchsia-500`}>{userTeam.name}</h2>
-                                <Card>
-                                    <div className={`p-8 rounded-2xl text-center ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
-                                        <EvaluateIcon className="w-12 h-12 mx-auto text-fuchsia-500 mb-4"/>
-                                        <p className={`text-lg font-medium ${theme.textPrimary} mb-4`}>{userTeam.evaluation.status}</p>
-                                        <div className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-violet-500 to-fuchsia-600 mb-6">
-                                            {userTeam.evaluation.score}/100
-                                        </div>
-
-                                        {userTeam.evaluation.breakdown && (
-                                            <div className="grid grid-cols-3 gap-4 mb-8 max-w-md mx-auto">
-                                                <div className="p-3 bg-gray-800/50 rounded-lg">
-                                                    <div className="text-xs text-gray-400 uppercase">Innovation</div>
-                                                    <div className="text-xl font-bold text-white">{userTeam.evaluation.breakdown.innovation || 0}</div>
-                                                </div>
-                                                <div className="p-3 bg-gray-800/50 rounded-lg">
-                                                    <div className="text-xs text-gray-400 uppercase">Execution</div>
-                                                    <div className="text-xl font-bold text-white">{userTeam.evaluation.breakdown.execution || 0}</div>
-                                                </div>
-                                                <div className="p-3 bg-gray-800/50 rounded-lg">
-                                                    <div className="text-xs text-gray-400 uppercase">Docs</div>
-                                                    <div className="text-xl font-bold text-white">{userTeam.evaluation.breakdown.documentation || 0}</div>
-                                                </div>
-                                            </div>
-                                        )}
-                                        
-                                        <div className={`text-left p-6 rounded-xl ${darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'}`}>
-                                            <p className={`text-sm font-bold ${theme.textSecondary} uppercase mb-3 border-b pb-2 ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>Instructor Feedback</p>
-                                            <p className={theme.textPrimary}>{userTeam.evaluation.feedback}</p>
-                                        </div>
-                                    </div>
-                                    <div className="mt-6 flex justify-center">
-                                        <Button variant="secondary" onClick={() => setCurrentView(VIEWS.REPORTS)} className="text-sm">
-                                            <ReportIcon className="w-4 h-4 mr-2"/> Review Submission
-                                        </Button>
-                                    </div>
-                                </Card>
-                            </div>
-                        )}
-                    </PageTransition>
-                </AnimatePresence>
+                                <div className="mt-6 flex justify-center">
+                                    <Button variant="secondary" onClick={() => setCurrentView(VIEWS.REPORTS)} className="text-sm">
+                                        <ReportIcon className="w-4 h-4 mr-2"/> Review Submission
+                                    </Button>
+                                </div>
+                            </Card>
+                        </div>
+                    )}
+                </div>
             </main>
             <Footer />
             <div id="toast" className="fixed top-4 right-4 z-50 transition-all duration-500 transform translate-y-20 opacity-0"></div>
