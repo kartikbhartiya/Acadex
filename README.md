@@ -116,6 +116,30 @@ The system recognizes the following email addresses as administrators with full 
 
 ## 🛠️ Tech Stack
 
+<div align="center">
+
+```mermaid
+graph LR
+    A[⚛️ React 18.3.1] --> B[TypeScript]
+    A --> C[Vite]
+    B --> D[🎨 Tailwind CSS]
+    D --> E[shadcn/ui]
+    E --> F[Radix UI]
+    A --> G[React Router]
+    A --> H[TanStack Query]
+    A --> I[React Hook Form]
+    I --> J[Zod]
+    D --> K[Lucide Icons]
+    
+    style A fill:#61DAFB,stroke:#000,color:#000
+    style B fill:#3178C6,stroke:#fff,color:#fff
+    style C fill:#646CFF,stroke:#fff,color:#fff
+    style D fill:#38B2AC,stroke:#fff,color:#fff
+    style E fill:#000,stroke:#fff,color:#fff
+```
+
+</div>
+
 ### Frontend
 - **[React](https://reactjs.org/) 18.3.1** - Modern UI library
 - **[TypeScript](https://www.typescriptlang.org/)** - Type-safe development
@@ -140,6 +164,57 @@ The system recognizes the following email addresses as administrators with full 
 - **[tailwindcss-animate](https://github.com/jamiebuilds/tailwindcss-animate)** - Animations
 - **[date-fns](https://date-fns.org/)** - Date Handling
 - **[Recharts](https://recharts.org/)** - Charts for data visualization
+
+---
+
+## 📈 Project Metrics & Insights
+
+<div align="center">
+
+### 📊 Repository Statistics
+
+![GitHub repo size](https://img.shields.io/github/repo-size/kartikbhartiya/Acadex?style=for-the-badge&color=00C9FF)
+![GitHub language count](https://img.shields.io/github/languages/count/kartikbhartiya/Acadex?style=for-the-badge&color=00C9FF)
+![GitHub top language](https://img.shields.io/github/languages/top/kartikbhartiya/Acadex?style=for-the-badge&color=00C9FF)
+![GitHub last commit](https://img.shields.io/github/last-commit/kartikbhartiya/Acadex?style=for-the-badge&color=00C9FF)
+
+### ⭐ Project Activity
+
+```mermaid
+gitGraph
+    commit id: "Initial Setup"
+    commit id: "Add Authentication"
+    commit id: "Team Management"
+    branch feature/evaluation
+    commit id: "Evaluation System"
+    commit id: "Admin Dashboard"
+    checkout main
+    merge feature/evaluation
+    commit id: "UI Enhancements"
+    commit id: "Production Ready"
+```
+
+### 🎯 Feature Completion Status
+
+```mermaid
+%%{init: {'theme':'dark'}}%%
+gantt
+    title Development Progress
+    dateFormat  YYYY-MM-DD
+    section Core Features
+    Authentication           :done, auth, 2024-01-01, 7d
+    Team Management         :done, team, 2024-01-08, 10d
+    Progress Tracking       :done, progress, 2024-01-18, 8d
+    section Advanced
+    Report Submission       :done, report, 2024-01-26, 7d
+    Evaluation System       :done, eval, 2024-02-02, 10d
+    Admin Dashboard         :done, admin, 2024-02-12, 8d
+    section Polish
+    UI/UX Improvements      :done, ui, 2024-02-20, 5d
+    Dark Mode              :done, dark, 2024-02-25, 3d
+```
+
+</div>
 
 ---
 
@@ -241,36 +316,99 @@ Comprehensive scoring system with detailed feedback capabilities.
 ## 🗂️ Project Structure
 
 ```
-student-project-management/
-├── public/
-│   ├── robots.txt
-│   └── favicon.ico
-├── src/
-│   ├── assets/              # Static assets
-│   ├── components/
-│   │   ├── ui/              # Shadcn UI components
-│   │   ├── Navigation.tsx   # Main navigation
-│   │   └── NavLink.tsx      # Navigation links
-│   ├── pages/
-│   │   ├── Home.tsx         # Landing page
-│   │   ├── Teams.tsx        # Team management
-│   │   ├── Projects.tsx     # Project database
-│   │   ├── Evaluation.tsx   # Evaluation interface
-│   │   └── NotFound.tsx     # 404 page
-│   ├── hooks/               # Custom React hooks
-│   │   └── use-mobile.tsx
-│   ├── lib/                 # Utility functions
-│   │   └── utils.ts
-│   ├── App.tsx              # Main app component
-│   ├── App.css              # App styles
-│   ├── index.css            # Global styles & design tokens
-│   └── main.tsx             # Application entry point
-├── index.html
-├── tailwind.config.ts       # Tailwind configuration
-├── vite.config.ts           # Vite configuration
-├── tsconfig.json            # TypeScript configuration
-├── package.json
-└── README.md
+Acadex/
+├── 📁 public/
+│   ├── robots.txt           # SEO configuration
+│   ├── favicon.ico          # Site icon
+│   └── placeholder.svg      # Default placeholder image
+│
+├── 📁 src/
+│   ├── 📁 components/       # React components
+│   │   ├── 📁 ui/          # Shadcn/ui component library (50+ components)
+│   │   │   ├── button.tsx
+│   │   │   ├── card.tsx
+│   │   │   ├── dialog.tsx
+│   │   │   ├── form.tsx
+│   │   │   ├── tabs.tsx
+│   │   │   └── ... (40+ more)
+│   │   ├── Navigation.tsx   # Main navigation component
+│   │   └── NavLink.tsx      # Navigation link helper
+│   │
+│   ├── 📁 pages/           # Application pages
+│   │   ├── Home.tsx        # Landing page & dashboard
+│   │   ├── Teams.tsx       # Team registration & management
+│   │   ├── Projects.tsx    # Project database & search
+│   │   ├── Evaluation.tsx  # Admin evaluation interface
+│   │   └── NotFound.tsx    # 404 error page
+│   │
+│   ├── 📁 hooks/           # Custom React hooks
+│   │   ├── use-mobile.tsx  # Mobile detection hook
+│   │   └── use-toast.ts    # Toast notification hook
+│   │
+│   ├── 📁 lib/             # Utility functions
+│   │   └── utils.ts        # Helper utilities
+│   │
+│   ├── App.tsx             # Main application component
+│   ├── App.css             # Component-specific styles
+│   ├── main.tsx            # Application entry point
+│   ├── index.css           # Global styles & design tokens
+│   └── vite-env.d.ts       # Vite type definitions
+│
+├── 📄 Configuration Files
+├── index.html              # HTML entry point
+├── vite.config.ts          # Vite build configuration
+├── tailwind.config.ts      # Tailwind CSS configuration
+├── tsconfig.json           # TypeScript configuration
+├── tsconfig.app.json       # App-specific TS config
+├── tsconfig.node.json      # Node-specific TS config
+├── eslint.config.js        # ESLint configuration
+├── postcss.config.js       # PostCSS configuration
+├── components.json         # Shadcn/ui component config
+├── package.json            # Dependencies & scripts
+├── package-lock.json       # Dependency lock file
+└── README.md              # Project documentation
+```
+
+### 📊 Project Statistics
+
+```mermaid
+pie title "Codebase Distribution"
+    "UI Components (shadcn)" : 50
+    "Pages & Routes" : 20
+    "Hooks & Utils" : 10
+    "Styling (CSS)" : 10
+    "Config Files" : 10
+```
+
+### 🏗️ Architecture Overview
+
+```mermaid
+graph TB
+    A[🌐 Entry Point<br/>index.html] --> B[⚛️ React App<br/>main.tsx]
+    B --> C[📱 App.tsx<br/>Router & Layout]
+    C --> D[🧭 Navigation]
+    C --> E[📄 Pages]
+    
+    E --> E1[🏠 Home]
+    E --> E2[👥 Teams]
+    E --> E3[📊 Projects]
+    E --> E4[⭐ Evaluation]
+    
+    E1 --> F[🎨 UI Components<br/>shadcn/ui]
+    E2 --> F
+    E3 --> F
+    E4 --> F
+    
+    F --> G[🎣 Custom Hooks]
+    F --> H[🔧 Utilities]
+    
+    style A fill:#4A90E2
+    style B fill:#50C878
+    style C fill:#9B59B6
+    style E fill:#E67E22
+    style F fill:#E91E63
+    style G fill:#00BCD4
+    style H fill:#FF9800
 ```
 
 ---
@@ -365,7 +503,6 @@ Created with ❤️ by the Academic Project Management Team
 
 ## 🙏 Acknowledgments
 
-- [Lovable](https://lovable.dev) - Development platform
 - [shadcn/ui](https://ui.shadcn.com/) - Component library
 - [Tailwind CSS](https://tailwindcss.com/) - Styling framework
 - [Lucide](https://lucide.dev/) - Icon library
@@ -378,8 +515,7 @@ Created with ❤️ by the Academic Project Management Team
 Need help? Reach out:
 
 - 📧 Email: support@acadex.edu
-- 🐛 Issues: [Report Bug](https://github.com/yourusername/student-project-management/issues)
-
+- 🐛 Issues: [Report Bug](https://github.com/kartikbhartiya/Acadext/issues)
 
 ---
 
