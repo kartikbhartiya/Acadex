@@ -94,8 +94,6 @@ The system recognizes the following email addresses as administrators with full 
 📧 Email: admin@acadex.edu
 🔐 Password: admin@123
 
-📧 Email: admin@protrack.edu  
-🔐 Password: (Set during first-time setup)
 ```
 
 > **Note**: Admin users have access to:
