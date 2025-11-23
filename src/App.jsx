@@ -50,7 +50,7 @@ const Icon = ({ children, className }) => (
 const ProgressIcon = (props) => <Icon {...props}><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></Icon>;
 const ReportIcon = (props) => <Icon {...props}><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></Icon>;
 const DatabaseIcon = (props) => <Icon {...props}><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12A9 9 0 0 0 21 12"/><path d="M3 19A9 9 0 0 0 21 19"/></Icon>;
-const EvaluateIcon = (props) => <Icon {...props}><path d="M12 20h.01"/><path d="M8.2 11.2a2 2 0 1 0 2.8 2.8"/><path d="M14.8 11.2a2 2 0 1 0 2.8 2.8"/><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z"/></Icon>;
+const EvaluateIcon = (props) => <Icon {...props}><path d="M12 20h.01"/><path d="M8.2 11.2a2 2 0 1 0 2.8 2.8"/><path d="M14.8 11.2a2 2 0 1 0 2.8 2.8"/><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 18z"/></Icon>;
 const PlusIcon = (props) => <Icon {...props}><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></Icon>;
 const TrashIcon = (props) => <Icon {...props}><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M15 6V4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v2"/></Icon>;
 const CheckCircleIcon = (props) => <Icon {...props}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></Icon>;
@@ -82,6 +82,8 @@ const MessageSquareIcon = (props) => <Icon {...props}><path d="M21 15a2 2 0 0 1-
 const BellIcon = (props) => <Icon {...props}><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" /></Icon>;
 const DownloadIcon = (props) => <Icon {...props}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></Icon>;
 const PieChartIcon = (props) => <Icon {...props}><path d="M21.21 15.89A10 10 0 1 1 8 2.83" /><path d="M22 12A10 10 0 0 0 12 2v10z" /></Icon>;
+const ArrowRightIcon = (props) => <Icon {...props}><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></Icon>;
+const CheckIcon = (props) => <Icon {...props}><polyline points="20 6 9 17 4 12" /></Icon>;
 
 // ==========================================
 // UI COMPONENTS (Enhanced)
@@ -168,6 +170,7 @@ export default function App() {
     const [showRawData, setShowRawData] = useState(false);
     const [showNotifications, setShowNotifications] = useState(false);
     const [authLoading, setAuthLoading] = useState(false);
+    const [showWelcome, setShowWelcome] = useState(true);
 
     // -- Toast System --
     const [toasts, setToasts] = useState([]);
@@ -181,43 +184,31 @@ export default function App() {
 
     const toggleTheme = () => setDarkMode(!darkMode);
     
-    // -- Theme Config (Refined for better contrast) --
     // -- Theme Config (Refined for High Contrast & Readability) --
     const theme = {
         appBg: darkMode ? 'bg-slate-950' : 'bg-gray-50', 
         navBg: darkMode 
             ? (isUserAdmin ? 'bg-slate-900 border-b border-cyan-900/50' : 'bg-slate-900 border-b border-slate-800')
             : 'bg-cyan border-b border-slate-200 shadow-sm',
-        
-        // Text - Increased contrast for readability
         textPrimary: darkMode ? 'text-gray-100' : 'text-slate-900',
         textSecondary: darkMode ? 'text-slate-400' : 'text-slate-600',
         textHighlight: darkMode ? 'text-white' : 'text-indigo-900',
         heading: darkMode ? 'text-white tracking-tight' : 'text-slate-900 tracking-tight',
-        
-        // Cards - Better separation from background
         card: darkMode 
             ? 'bg-slate-900 border border-slate-800 shadow-xl shadow-black/20' 
             : 'bg-cyan border border-slate-200 shadow-lg shadow-slate-200/60',
-        
-        // Inputs - Distinct from cards
         input: darkMode 
             ? 'bg-slate-950 text-white border-slate-700 focus:border-indigo-500 placeholder-slate-600' 
             : 'bg-slate-50 text-slate-900 border-slate-300 focus:border-indigo-600 placeholder-slate-400',
-        
-        // Buttons & Accents
         accentPrimary: isUserAdmin 
             ? 'bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-900/20 border border-transparent' 
             : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-900/20 border border-transparent',
-        
         accentSecondary: darkMode 
             ? 'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700' 
             : 'bg-cyan hover:bg-slate-50 text-slate-700 border border-slate-200 shadow-sm',
-        
         navActive: isUserAdmin 
             ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20' 
             : 'bg-indigo-500/10 text-indigo-600 border border-indigo-500/20',
-        
         navItem: darkMode 
             ? 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/50' 
             : 'text-slate-500 hover:text-indigo-700 hover:bg-slate-100',
@@ -268,6 +259,7 @@ export default function App() {
                 const name = user.displayName || (user.isAnonymous ? `${ANONYMOUS_NAME_PREFIX}${user.uid.slice(0,4)}` : email.split('@')[0]);
                 setUserName(name);
                 setIsUserAdmin(ADMIN_EMAILS.includes(email.toLowerCase()));
+                setShowWelcome(false); // Auto-hide welcome if logged in
 
                 const userDocRef = doc(db, 'artifacts', appId, 'users', user.uid);
                 try {
@@ -342,7 +334,12 @@ export default function App() {
             if (action === 'signup') await createUserWithEmailAndPassword(auth, ...args);
             if (action === 'google') await signInWithPopup(auth, new GoogleAuthProvider());
             if (action === 'anon') await signInAnonymously(auth);
-            if (action === 'logout') { await signOut(auth); setCurrentView(VIEWS.DASHBOARD); setAuthView(AUTH_VIEWS.INIT); }
+            if (action === 'logout') { 
+                await signOut(auth); 
+                setCurrentView(VIEWS.DASHBOARD); 
+                setAuthView(AUTH_VIEWS.INIT);
+                setShowWelcome(true); // Reset to welcome page on logout
+            }
             
             addToast('success', action === 'logout' ? 'Logged out' : 'Success!');
             if (action !== 'logout') setAuthView(AUTH_VIEWS.INIT);
@@ -500,7 +497,167 @@ export default function App() {
         </footer>
     );
 
-    // -- Sub-Views --
+    // --- Enhanced Welcome Page ---
+    const WelcomeLanding = ({ onGetStarted }) => {
+        const scrollToFeatures = () => {
+            const el = document.getElementById('features-section');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+        };
+
+        return (
+            <div className={`min-h-screen flex flex-col ${theme.appBg} transition-colors duration-500 overflow-x-hidden`}>
+                {/* Hero Section */}
+                <div className="relative flex flex-col items-center justify-center min-h-screen p-4 overflow-hidden">
+                    {/* Background Decor */}
+                    <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+                        <div className="absolute -top-20 -left-20 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl animate-pulse"></div>
+                        <div className="absolute top-1/2 -right-20 w-72 h-72 bg-fuchsia-500/20 rounded-full blur-3xl animate-pulse delay-700"></div>
+                        <div className="absolute bottom-0 left-1/3 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl"></div>
+                    </div>
+
+                    <div className="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10 pt-10">
+                        <div className="space-y-8 animate-fade-in-up">
+                            <div>
+                                <div className="w-20 h-20 flex items-center justify-center mb-6 bg-gradient-to-br from-indigo-500 to-fuchsia-600 rounded-2xl shadow-lg text-white">
+                                    <img src="/logo.png" alt="Acadex" className="h-12 w-auto object-contain brightness-0 invert" />
+                                </div>
+                                <h1 className={`text-5xl md:text-7xl font-black leading-tight ${theme.heading}`}>
+                                    Elevate Your <br/>
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-fuchsia-500">Academic Journey</span>
+                                </h1>
+                                <p className={`text-lg md:text-xl ${theme.textSecondary} max-w-lg mt-6 leading-relaxed`}>
+                                    The all-in-one platform for students and faculty to manage projects, track real-time progress, and streamline the grading process with ease.
+                                </p>
+                            </div>
+
+                            <div className="flex flex-col sm:flex-row gap-4">
+                                <Button theme={theme} onClick={onGetStarted} className="px-8 py-4 text-lg shadow-lg shadow-indigo-500/30">
+                                    Get Started <ArrowRightIcon className="w-5 h-5 ml-2" />
+                                </Button>
+                                <button onClick={scrollToFeatures} className={`px-8 py-4 rounded-xl font-semibold flex items-center justify-center border ${darkMode ? 'border-slate-700 text-slate-300 hover:bg-slate-800' : 'border-slate-200 text-slate-600 hover:bg-slate-100'}`}>
+                                    Learn More
+                                </button>
+                            </div>
+
+                            <div className="pt-8 border-t border-slate-200 dark:border-slate-800 grid grid-cols-3 gap-6">
+                                {[
+                                    { label: 'Active Projects', val: '8' },
+                                    { label: 'Users', val: '10' },
+                                    { label: 'Satisfaction', val: '99%' }
+                                ].map((stat, i) => (
+                                    <div key={i}>
+                                        <div className={`text-2xl font-bold ${theme.textPrimary}`}>{stat.val}</div>
+                                        <div className={`text-xs uppercase tracking-wider ${theme.textSecondary}`}>{stat.label}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="hidden lg:grid grid-cols-2 gap-4 animate-fade-in-right transform rotate-1 hover:rotate-0 transition-transform duration-500">
+                            <Card theme={theme} className="col-span-2 !p-8 bg-gradient-to-br from-slate-800 to-slate-900 border-none shadow-2xl relative overflow-hidden group">
+                                <div className="absolute top-0 right-0 p-10 opacity-10 group-hover:opacity-20 transition-opacity transform group-hover:scale-110 duration-500">
+                                    <LayoutIcon width="120" height="120" />
+                                </div>
+                                <div className="flex justify-between items-start mb-4 relative z-10">
+                                    <div className="p-3 bg-indigo-500/20 rounded-xl text-indigo-400"><LayoutIcon className="w-8 h-8"/></div>
+                                    <div className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold animate-pulse">Live Demo</div>
+                                </div>
+                                <h3 className="text-white text-xl font-bold mb-2 relative z-10">Centralized Dashboard</h3>
+                                <p className="text-slate-400 text-sm relative z-10">Track deadlines, manage tasks, and visualize progress in one intuitive interface.</p>
+                            </Card>
+                            <Card theme={theme} className="bg-slate-100 dark:bg-slate-800 border-none hover:-translate-y-1 transition-transform">
+                                <div className="p-2 bg-fuchsia-100 dark:bg-fuchsia-900/30 w-fit rounded-lg text-fuchsia-600 mb-3"><EvaluateIcon className="w-6 h-6"/></div>
+                                <h4 className={`font-bold ${theme.heading}`}>Smart Grading</h4>
+                                <p className={`text-xs ${theme.textSecondary} mt-1`}>Automated rubrics & instant feedback.</p>
+                            </Card>
+                            <Card theme={theme} className="bg-slate-100 dark:bg-slate-800 border-none hover:-translate-y-1 transition-transform">
+                                <div className="p-2 bg-cyan-100 dark:bg-cyan-900/30 w-fit rounded-lg text-cyan-600 mb-3"><UsersIcon className="w-6 h-6"/></div>
+                                <h4 className={`font-bold ${theme.heading}`}>Team Sync</h4>
+                                <p className={`text-xs ${theme.textSecondary} mt-1`}>Seamless collaboration for groups.</p>
+                            </Card>
+                        </div>
+                    </div>
+                    
+                    {/* Scroll Down Indicator */}
+                    <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce cursor-pointer opacity-50 hover:opacity-100" onClick={scrollToFeatures}>
+                         <Icon className="w-8 h-8 text-slate-500"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></Icon>
+                    </div>
+                </div>
+
+                {/* Features Section */}
+                <div id="features-section" className={`py-20 px-4 ${darkMode ? 'bg-slate-900/50' : 'bg-slate-100'}`}>
+                    <div className="max-w-6xl mx-auto">
+                        <div className="text-center mb-16">
+                            <span className="text-indigo-500 font-bold tracking-wider uppercase text-sm">Features</span>
+                            <h2 className={`text-4xl font-bold mt-2 ${theme.heading}`}>Everything you need to succeed</h2>
+                            <p className={`mt-4 max-w-2xl mx-auto ${theme.textSecondary}`}>AcadEx streamlines the chaotic process of project management into a simple, coherent workflow.</p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                             {[
+                                { title: "Kanban Tracking", desc: "Drag and drop tasks to manage workflow status efficiently.", icon: LayoutIcon, color: "text-blue-500", bg: "bg-blue-500/10" },
+                                { title: "Real-time Collaboration", desc: "Comment on tasks and sync updates instantly with your team.", icon: UsersIcon, color: "text-emerald-500", bg: "bg-emerald-500/10" },
+                                { title: "Secure Submissions", desc: "Submit reports and link external resources in a locked-down environment.", icon: FileIcon, color: "text-fuchsia-500", bg: "bg-fuchsia-500/10" },
+                                { title: "Analytics Dashboard", desc: "Admin insights into project completion rates and performance metrics.", icon: PieChartIcon, color: "text-orange-500", bg: "bg-orange-500/10" },
+                                { title: "Automated Grading", desc: "Rubric-based evaluation system for standardized scoring.", icon: EvaluateIcon, color: "text-violet-500", bg: "bg-violet-500/10" },
+                                { title: "Role Management", desc: "Distinct portals for Students, Team Leads, and Administrators.", icon: ShieldIcon, color: "text-cyan-500", bg: "bg-cyan-500/10" }
+                             ].map((f, i) => (
+                                 <Card key={i} theme={theme} className="hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-slate-200 dark:border-slate-800">
+                                     <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${f.bg} ${f.color}`}>
+                                         <f.icon className="w-6 h-6" />
+                                     </div>
+                                     <h3 className={`text-xl font-bold mb-2 ${theme.heading}`}>{f.title}</h3>
+                                     <p className={`text-sm leading-relaxed ${theme.textSecondary}`}>{f.desc}</p>
+                                 </Card>
+                             ))}
+                        </div>
+                    </div>
+                </div>
+
+                {/* How It Works Section */}
+                <div className="py-20 px-4">
+                    <div className="max-w-5xl mx-auto">
+                        <h2 className={`text-3xl font-bold mb-12 text-center ${theme.heading}`}>How It Works</h2>
+                        <div className="relative">
+                            {/* Connector Line */}
+                            <div className="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-slate-200 dark:bg-slate-800 -translate-y-1/2 z-0"></div>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
+                                {[
+                                    { step: "01", title: "Sign Up", desc: "Create your student or admin profile." },
+                                    { step: "02", title: "Form Team", desc: "Invite members and register a project." },
+                                    { step: "03", title: "Track", desc: "Manage tasks and submit updates." },
+                                    { step: "04", title: "Evaluate", desc: "Get graded and receive feedback." }
+                                ].map((s, i) => (
+                                    <div key={i} className={`p-6 rounded-2xl text-center ${theme.card} border border-slate-200 dark:border-slate-700`}>
+                                        <div className="w-10 h-10 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center mx-auto mb-4 text-lg shadow-lg shadow-indigo-500/30">{s.step}</div>
+                                        <h3 className={`text-lg font-bold mb-2 ${theme.heading}`}>{s.title}</h3>
+                                        <p className={`text-sm ${theme.textSecondary}`}>{s.desc}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* CTA Section */}
+                <div className="py-20 px-4">
+                     <div className={`max-w-4xl mx-auto rounded-3xl p-12 text-center relative overflow-hidden ${isUserAdmin ? 'bg-gradient-to-r from-cyan-900 to-slate-900' : 'bg-gradient-to-r from-indigo-900 to-slate-900'} shadow-2xl`}>
+                        <div className="absolute top-0 right-0 p-4 opacity-10"><DatabaseIcon width="300" height="300" className="text-white"/></div>
+                        <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 relative z-10">Ready to streamline your projects?</h2>
+                        <p className="text-indigo-100 mb-8 max-w-2xl mx-auto relative z-10">Join thousands of students and faculty members who are already using AcadEx to achieve academic excellence.</p>
+                        <Button theme={theme} onClick={onGetStarted} className="px-10 py-4 text-lg bg-cyan text-indigo-900 hover:bg-indigo-50 border-none shadow-xl mx-auto relative z-10">
+                            Get Started Now
+                        </Button>
+                     </div>
+                </div>
+
+                <Footer />
+            </div>
+        );
+    };
+
+    // --- Sub-Views ---
     
     const ProfileView = () => {
         const [formData, setFormData] = useState({
@@ -634,7 +791,15 @@ export default function App() {
 
         return (
             <div className={`min-h-screen flex items-center justify-center p-4 ${theme.appBg} transition-colors duration-500`}>
-                <div className="w-full max-w-md">
+                <div className="w-full max-w-md animate-fade-in-up relative">
+                    {/* Back to Home Button */}
+                    <button 
+                        onClick={() => setShowWelcome(true)}
+                        className={`absolute -top-12 left-0 flex items-center text-sm font-medium ${theme.textSecondary} hover:text-indigo-500 transition-colors`}
+                    >
+                        <span className="mr-1">←</span> Back to Home
+                    </button>
+
                     <div className="text-center mb-8">
                         <div className="w-20 h-20 mx-auto flex items-center justify-center mb-4 bg-cyan rounded-2xl shadow-lg">
                             <img src="/logo.png" alt="Acadex" className="h-12 w-auto object-contain" />
@@ -1666,7 +1831,12 @@ export default function App() {
         </div>
     );
 
-    if (!userId) return <AuthScreen />;
+    if (!userId) {
+        if (showWelcome) {
+            return <WelcomeLanding onGetStarted={() => setShowWelcome(false)} />;
+        }
+        return <AuthScreen />;
+    }
 
     return (
         <div className={`flex flex-col min-h-screen ${theme.appBg} ${theme.textPrimary} transition-colors duration-500 font-sans selection:bg-indigo-500 selection:text-white`}>
